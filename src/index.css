@@ -1,0 +1,56 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@400;600;700&display=swap');
+
+.font-arabic {
+  font-family: 'Cairo', 'Amiri', sans-serif;
+  direction: rtl;
+}
+
+* {
+  font-family: 'Cairo', 'Amiri', sans-serif;
+}
+
+body {
+  direction: rtl;
+}
+
+/* Custom animations */
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+/* Smooth transitions for all interactive elements */
+button, .interactive {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Beautiful gradients */
+.gradient-text {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Shadow variations */
+.shadow-3xl {
+  box-shadow: 0 35px 60px -12px rgba(0, 0, 0, 0.25);
+}
+
+/* Pulse animation for buttons */
+@keyframes pulse-color {
+  0%, 100% { background-color: rgb(59 130 246); }
+  50% { background-color: rgb(37 99 235); }
+}
+
+.animate-pulse-color {
+  animation: pulse-color 2s infinite;
+}
