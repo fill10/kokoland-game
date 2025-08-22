@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { BookOpen, Volume2, CheckCircle, RefreshCw, Target, Trophy, X, Play } from 'lucide-react';
+import { BookOpen, Volume2, CheckCircle, RefreshCw, Target, Play } from 'lucide-react';
 import LetterSortingGame from './LetterSortingGame';
 
 const arabicLetters = [
@@ -32,7 +32,7 @@ const KokoLearning: React.FC = () => {
   const currentData = currentMode === 'letters' ? arabicLetters : arabicNumbers;
   const currentItem = currentData[currentIndex];
 
-  // دالة النطق باستخدام Web Audio API
+  // نطق العنصر الحالي
   const speakItem = (item: string) => {
     const text = currentMode === 'letters' ? letterPronunciation[item] : numberPronunciation[item];
     
@@ -41,19 +41,18 @@ const KokoLearning: React.FC = () => {
       speechSynthesis.cancel();
       
       const utterance = new SpeechSynthesisUtterance(text);
-      utterance.lang = 'ar-SA'; // اللغة العربية
-      utterance.rate = 0.7; // سرعة النطق
-      utterance.pitch = 1.2; // نبرة الصوت
-      utterance.volume = 0.8; // مستوى الصوت
+      utterance.lang = 'ar-SA'; 
+      utterance.rate = 1;    // سرعة طبيعية
+      utterance.pitch = 1;   // نبرة طبيعية
+      utterance.volume = 1;  // صوت مرتفع وواضح
       
       speechSynthesis.speak(utterance);
     } else {
-      // صوت بديل باستخدام Web Audio API
       playBeepSound();
     }
   };
 
-  // صوت بديل في حالة عدم توفر النطق
+  // صوت بديل
   const playBeepSound = () => {
     const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
     const oscillator = audioContext.createOscillator();
@@ -62,8 +61,8 @@ const KokoLearning: React.FC = () => {
     oscillator.connect(gainNode);
     gainNode.connect(audioContext.destination);
     
-    oscillator.frequency.setValueAtTime(523.25, audioContext.currentTime); // C5
-    oscillator.frequency.setValueAtTime(659.25, audioContext.currentTime + 0.2); // E5
+    oscillator.frequency.setValueAtTime(523.25, audioContext.currentTime);
+    oscillator.frequency.setValueAtTime(659.25, audioContext.currentTime + 0.2);
     
     oscillator.type = 'sine';
     gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
@@ -75,13 +74,11 @@ const KokoLearning: React.FC = () => {
 
   const handleNext = () => {
     setShowSuccess(true);
-    // نطق العنصر الحالي عند النجاح
     setTimeout(() => speakItem(currentItem), 200);
     
     setTimeout(() => {
       setShowSuccess(false);
       setCurrentIndex((prev) => (prev + 1) % currentData.length);
-      // نطق العنصر الجديد
       setTimeout(() => speakItem(currentData[(currentIndex + 1) % currentData.length]), 300);
     }, 1000);
   };
@@ -89,7 +86,6 @@ const KokoLearning: React.FC = () => {
   const handleReset = () => {
     setCurrentIndex(0);
     setShowSuccess(false);
-    // نطق العنصر الأول
     setTimeout(() => speakItem(currentData[0]), 300);
   };
 
