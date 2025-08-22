@@ -1,0 +1,167 @@
+﻿/* -------------------------
+   Reset عام
+------------------------- */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+/* -------------------------
+   إعدادات عامة
+------------------------- */
+body {
+  font-family: 'Comic Sans MS', cursive, sans-serif;
+  background: linear-gradient(to bottom, #fdf6e3, #ffeaa7);
+  color: #333;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  min-height: 100vh;
+  overflow-x: hidden;
+  text-align: center;
+}
+/* -------------------------
+   رأس اللعبة
+------------------------- */
+header {
+  width: 100%;
+  padding: 15px 0;
+  background: #74b9ff;
+  color: white;
+  font-size: 24px;
+  font-weight: bold;
+  letter-spacing: 1px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+/* -------------------------
+   منطقة اللعبة
+------------------------- */
+.game-container {
+  width: 95%;
+  max-width: 1000px;
+  margin: 20px auto;
+  background: white;
+  border-radius: 20px;
+  padding: 20px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+/* -------------------------
+   منطقة السحب والإفلات
+------------------------- */
+.drop-zones {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  gap: 15px;
+  margin-top: 20px;
+}
+.drop-zone {
+  width: 100px;
+  height: 100px;
+  border: 2px dashed #ccc;
+  border-radius: 15px;
+  background: #f8f8f8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: 0.3s;
+}
+.drop-zone:hover {
+  background: #dfe6e9;
+  border-color: #74b9ff;
+}
+/* -------------------------
+   العناصر القابلة للسحب
+------------------------- */
+.draggable {
+  width: 90px;
+  height: 90px;
+  cursor: grab;
+  transition: transform 0.3s;
+}
+.draggable:active {
+  cursor: grabbing;
+  transform: scale(1.1);
+}
+/* -------------------------
+   الأزرار
+------------------------- */
+button {
+  background: #74b9ff;
+  color: white;
+  font-size: 18px;
+  font-weight: bold;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 25px;
+  margin: 15px 5px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+button:hover {
+  background: #0984e3;
+}
+/* -------------------------
+   شاشة البداية
+------------------------- */
+#intro-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.95);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  z-index: 1000;
+}
+#intro-screen img {
+  width: 150px;
+  margin-bottom: 20px;
+}
+#intro-screen button {
+  background: #55efc4;
+  font-size: 20px;
+}
+#intro-screen button:hover {
+  background: #00cec9;
+}
+/* -------------------------
+   الرسائل التشجيعية
+------------------------- */
+.message {
+  margin-top: 15px;
+  font-size: 18px;
+  font-weight: bold;
+  color: #2d3436;
+  animation: fadeIn 0.5s ease-in-out;
+}
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+/* -------------------------
+   قسم "هيا نلون"
+------------------------- */
+#coloring-section {
+  margin-top: 30px;
+}
+#coloring-section img {
+  width: 100px;
+  margin: 10px;
+  border: 2px solid #ccc;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: transform 0.3s;
+}
+#coloring-section img:hover {
+  transform: scale(1.1);
+}
