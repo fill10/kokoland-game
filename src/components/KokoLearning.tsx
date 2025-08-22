@@ -69,7 +69,7 @@ const KokoLearning: React.FC = () => {
       speechSynthesis.cancel();
       const utterance = new SpeechSynthesisUtterance(text);
       utterance.lang = language === 'ar' ? 'ar-SA' : 'en-US';
-      utterance.rate = 0.9;
+      utterance.rate = 1;
       utterance.pitch = 1;
       utterance.volume = 1; // أعلى صوت
       speechSynthesis.speak(utterance);
