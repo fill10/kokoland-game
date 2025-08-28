@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 
 type Letter = {
   id: number;
@@ -54,20 +54,28 @@ const LetterSortingGame: React.FC = () => {
   ];
 
   const [currentLevel, setCurrentLevel] = useState(0);
+  const [showSuccess, setShowSuccess] = useState(false);
 
-  // تشغيل الصوت عند النقر
+  // تشغيل الصوت
   const playSound = (soundPath: string) => {
     const audio = new Audio(soundPath);
     audio.volume = 1.0;
     audio.play().catch((err) => console.warn('تعذر تشغيل الصوت:', err));
   };
 
+  // عند إنهاء المستوى
+  const completeLevel = () => {
+    setShowSuccess(true);
+  };
+
   // الانتقال للمستوى التالي
   const nextLevel = () => {
     if (currentLevel < levels.length - 1) {
       setCurrentLevel(currentLevel + 1);
+      setShowSuccess(false);
     } else {
-      alert('🎉 لقد أنهيت جميع المستويات!');
+      setShowSuccess(false);
+      alert('🎉 لقد أنهيت جميع المستويات!'); // تنبيه أخير عند الانتهاء كليًا
     }
   };
 
@@ -77,25 +85,61 @@ const LetterSortingGame: React.FC = () => {
         لعبة ترتيب الحروف - المستوى {currentLevel + 1}
       </h1>
 
+      {/* مربعات الحروف */}
       <div className="grid grid-cols-2 gap-6 mb-6">
         {levels[currentLevel].map((letter) => (
           <motion.div
             key={letter.id}
             onClick={() => playSound(letter.sound)}
-            className="bg-white w-32 h-32 flex items-center justify-center rounded-2xl shadow-lg cursor-pointer hover:shadow-xl hover:scale-105 transition-transform duration-300 border-4 border-purple-300"
+            className="bg-white w-40 h-40 flex items-center justify-center rounded-2xl shadow-lg cursor-pointer hover:shadow-xl hover:scale-105 transition-transform duration-300 border-4 border-purple-300"
             whileTap={{ scale: 0.95 }}
           >
-            <span className="text-5xl font-bold text-purple-700">{letter.char}</span>
+            <span className="text-6xl font-bold text-purple-700">{letter.char}</span>
           </motion.div>
         ))}
       </div>
 
+      {/* زر إنهاء المستوى */}
       <button
-        onClick={nextLevel}
+        onClick={completeLevel}
         className="bg-purple-600 text-white px-6 py-3 rounded-full shadow-lg hover:bg-purple-700 hover:shadow-xl transition-all duration-300 font-arabic"
       >
-        المستوى التالي ⏭
+        إنهاء المستوى ✅
       </button>
+
+      {/* نافذة النجاح */}
+      <AnimatePresence>
+        {showSuccess && (
+          <motion.div
+            initial={{ opacity: 0, y: -30 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -30 }}
+            className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black/50 z-50"
+          >
+            <motion.div
+              initial={{ scale: 0.8 }}
+              animate={{ scale: 1 }}
+              exit={{ scale: 0.8 }}
+              className="bg-white rounded-2xl shadow-xl p-8 w-80 text-center"
+            >
+              <h2 className="text-2xl font-bold text-green-600 mb-4">
+                🎉 أحسنت!
+              </h2>
+              <p className="text-lg text-gray-700 mb-6">
+                لقد أنهيت المستوى {currentLevel + 1} بنجاح!
+              </p>
+              <button
+                onClick={nextLevel}
+                className="bg-green-500 text-white px-6 py-2 rounded-full shadow-md hover:bg-green-600 transition-all duration-300"
+              >
+                {currentLevel < levels.length - 1
+                  ? 'المستوى التالي ⏭'
+                  : 'إنهاء اللعبة 🎯'}
+              </button>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };
