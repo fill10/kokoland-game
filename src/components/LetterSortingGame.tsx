@@ -11,28 +11,28 @@ const LetterSortingGame: React.FC = () => {
   // مستويات تحتوي على 4 حروف في كل مستوى
   const levels: Letter[][] = [
     [
-      { id: 1, char: 'أ', sound: '/arabic/a.mp3' },
-      { id: 2, char: 'ب', sound: '/arabic/b.mp3' },
-      { id: 3, char: 'ت', sound: '/arabic/t.mp3' },
-      { id: 4, char: 'ث', sound: '/arabic/th.mp3' },
+      { id: 1, char: 'أ', sound: '/sounds/a.mp3' },
+      { id: 2, char: 'ب', sound: '/sounds/a.mp3' },
+      { id: 3, char: 'ت', sound: '/sounds/a.mp3' },
+      { id: 4, char: 'ث', sound: '/sounds/a.mp3' },
     ],
     [
-      { id: 5, char: 'ج', sound: '/arabic/ga.mp3' },
-      { id: 6, char: 'ح', sound: '/arabic/h.mp3' },
-      { id: 7, char: 'خ', sound: '/arabic/ka.mp3' },
-      { id: 8, char: 'د', sound: '/arabic/d.mp3' },
+      { id: 5, char: 'ج', sound: '/sounds/a.mp3' },
+      { id: 6, char: 'ح', sound: '/sounds/a.mp3' },
+      { id: 7, char: 'خ', sound: '/sounds/a.mp3' },
+      { id: 8, char: 'د', sound: '/sounds/a.mp3' },
     ],
     [
-      { id: 9, char: 'ذ', sound: '/arabic/tha.mp3' },
-      { id: 10, char: 'ر', sound: '/arabic/ra.mp3' },
-      { id: 11, char: 'ز', sound: '/arabic/za.mp3' },
-      { id: 12, char: 'س', sound: '/arabic/sa.mp3' },
+      { id: 9, char: 'ذ', sound: '/sounds/a.mp3' },
+      { id: 10, char: 'ر', sound: '/sounds/a.mp3' },
+      { id: 11, char: 'ز', sound: '/sounds/a.mp3' },
+      { id: 12, char: 'س', sound: '/sounds/a.mp3' },
     ],
     [
-      { id: 13, char: 'ش', sound: '/arabic/sha.mp3' },
-      { id: 14, char: 'ص', sound: '/arabic/sa.mp3' },
-      { id: 15, char: 'ض', sound: '/arabic/da.mp3' },
-      { id: 16, char: 'ط', sound: '/arabic/ta.mp3' },
+      { id: 13, char: 'ش', sound: '/sounds/a.mp3' },
+      { id: 14, char: 'ص', sound: '/sounds/a.mp3' },
+      { id: 15, char: 'ض', sound: '/sounds/a.mp3' },
+      { id: 16, char: 'ط', sound: '/sounds/a.mp3' },
     ],
   ];
 
