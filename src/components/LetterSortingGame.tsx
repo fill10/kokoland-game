@@ -8,40 +8,57 @@ type Letter = {
 };
 
 const LetterSortingGame: React.FC = () => {
-  // مستويات تحتوي على 4 حروف في كل مستوى
+  // المستويات - 4 حروف في كل مستوى
   const levels: Letter[][] = [
     [
       { id: 1, char: 'أ', sound: '/sounds/a.mp3' },
-      { id: 2, char: 'ب', sound: '/sounds/a.mp3' },
-      { id: 3, char: 'ت', sound: '/sounds/a.mp3' },
-      { id: 4, char: 'ث', sound: '/sounds/a.mp3' },
+      { id: 2, char: 'ب', sound: '/sounds/b.mp3' },
+      { id: 3, char: 'ت', sound: '/sounds/t.mp3' },
+      { id: 4, char: 'ث', sound: '/sounds/th.mp3' },
     ],
     [
-      { id: 5, char: 'ج', sound: '/sounds/a.mp3' },
-      { id: 6, char: 'ح', sound: '/sounds/a.mp3' },
-      { id: 7, char: 'خ', sound: '/sounds/a.mp3' },
-      { id: 8, char: 'د', sound: '/sounds/a.mp3' },
+      { id: 5, char: 'ج', sound: '/sounds/ga.mp3' },
+      { id: 6, char: 'ح', sound: '/sounds/h.mp3' },
+      { id: 7, char: 'خ', sound: '/sounds/ka.mp3' },
+      { id: 8, char: 'د', sound: '/sounds/d.mp3' },
     ],
     [
-      { id: 9, char: 'ذ', sound: '/sounds/a.mp3' },
-      { id: 10, char: 'ر', sound: '/sounds/a.mp3' },
-      { id: 11, char: 'ز', sound: '/sounds/a.mp3' },
-      { id: 12, char: 'س', sound: '/sounds/a.mp3' },
+      { id: 9, char: 'ذ', sound: '/sounds/tha.mp3' },
+      { id: 10, char: 'ر', sound: '/sounds/ra.mp3' },
+      { id: 11, char: 'ز', sound: '/sounds/za.mp3' },
+      { id: 12, char: 'س', sound: '/sounds/saa.mp3' },
     ],
     [
-      { id: 13, char: 'ش', sound: '/sounds/a.mp3' },
-      { id: 14, char: 'ص', sound: '/sounds/a.mp3' },
-      { id: 15, char: 'ض', sound: '/sounds/a.mp3' },
-      { id: 16, char: 'ط', sound: '/sounds/a.mp3' },
+      { id: 13, char: 'ش', sound: '/sounds/sha.mp3' },
+      { id: 14, char: 'ص', sound: '/sounds/sa.mp3' },
+      { id: 15, char: 'ض', sound: '/sounds/da.mp3' },
+      { id: 16, char: 'ط', sound: '/sounds/taa.mp3' },
+    ],
+    [
+      { id: 17, char: 'ع', sound: '/sounds/aa.mp3' },
+      { id: 18, char: 'غ', sound: '/sounds/kha.mp3' },
+      { id: 19, char: 'ف', sound: '/sounds/fa.mp3' },
+      { id: 20, char: 'ق', sound: '/sounds/gaa.mp3' },
+    ],
+    [
+      { id: 21, char: 'ك', sound: '/sounds/kaa.mp3' },
+      { id: 22, char: 'ل', sound: '/sounds/la.mp3' },
+      { id: 23, char: 'م', sound: '/sounds/ma.mp3' },
+      { id: 24, char: 'ن', sound: '/sounds/na.mp3' },
+    ],
+    [
+      { id: 25, char: 'هـ', sound: '/sounds/haa.mp3' },
+      { id: 26, char: 'و', sound: '/sounds/wa.mp3' },
+      { id: 27, char: 'ي', sound: '/sounds/ya.mp3' },
     ],
   ];
 
   const [currentLevel, setCurrentLevel] = useState(0);
 
-  // تشغيل الصوت عند النقر أو السحب
+  // تشغيل الصوت عند النقر
   const playSound = (soundPath: string) => {
     const audio = new Audio(soundPath);
-    audio.volume = 1.0; // أعلى مستوى للصوت
+    audio.volume = 1.0;
     audio.play().catch((err) => console.warn('تعذر تشغيل الصوت:', err));
   };
 
