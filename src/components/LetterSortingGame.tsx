@@ -8,7 +8,7 @@ type Letter = {
 };
 
 const LetterSortingGame: React.FC = () => {
-  // المستويات - 4 حروف في كل مستوى
+  // المستويات: 4 حروف في كل مستوى
   const levels: Letter[][] = [
     [
       { id: 1, char: 'أ', sound: '/sounds/a.mp3' },
@@ -63,7 +63,7 @@ const LetterSortingGame: React.FC = () => {
     audio.play().catch((err) => console.warn('تعذر تشغيل الصوت:', err));
   };
 
-  // عند إنهاء المستوى
+  // إنهاء المستوى
   const completeLevel = () => {
     setShowSuccess(true);
   };
@@ -75,7 +75,7 @@ const LetterSortingGame: React.FC = () => {
       setShowSuccess(false);
     } else {
       setShowSuccess(false);
-      alert('🎉 لقد أنهيت جميع المستويات!'); // تنبيه أخير عند الانتهاء كليًا
+      alert('🎉 لقد أنهيت جميع المستويات!');
     }
   };
 
@@ -91,10 +91,10 @@ const LetterSortingGame: React.FC = () => {
           <motion.div
             key={letter.id}
             onClick={() => playSound(letter.sound)}
-            className="bg-white w-40 h-40 flex items-center justify-center rounded-2xl shadow-lg cursor-pointer hover:shadow-xl hover:scale-105 transition-transform duration-300 border-4 border-purple-300"
+            className="bg-white w-48 h-48 flex items-center justify-center rounded-2xl shadow-lg cursor-pointer hover:shadow-xl hover:scale-105 transition-transform duration-300 border-4 border-purple-300"
             whileTap={{ scale: 0.95 }}
           >
-            <span className="text-6xl font-bold text-purple-700">{letter.char}</span>
+            <span className="text-7xl font-bold text-purple-700">{letter.char}</span>
           </motion.div>
         ))}
       </div>
@@ -102,7 +102,7 @@ const LetterSortingGame: React.FC = () => {
       {/* زر إنهاء المستوى */}
       <button
         onClick={completeLevel}
-        className="bg-purple-600 text-white px-6 py-3 rounded-full shadow-lg hover:bg-purple-700 hover:shadow-xl transition-all duration-300 font-arabic"
+        className="bg-purple-600 text-white px-8 py-3 rounded-full shadow-lg hover:bg-purple-700 hover:shadow-xl transition-all duration-300 font-arabic"
       >
         إنهاء المستوى ✅
       </button>
