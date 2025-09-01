@@ -4,6 +4,7 @@ import HomePage from './components/HomePage';
 import KokoLearning from './components/KokoLearning';
 import SaraColoring from './components/SaraColoring';
 import AhmedPuzzle from './components/AhmedPuzzle';
+import ShapesGame from './components/ShapesGame';
 import GeometryShapes from './components/GeometryShapes';
 import CertificateGenerator from './components/CertificateGenerator';
 
