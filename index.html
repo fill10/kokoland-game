@@ -1,22 +1,55 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ar" dir="rtl">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>KokoLand – عالم كوكو - لعبة للأطفال</title>
+<head>
+  <meta charset="UTF-8">
+  <title>كوكو وأصدقاء الحروف | Kokoland Game</title>
+  <link rel="stylesheet" href="index.css">
+</head>
+<body>
+  <div id="app">
 
-    <!-- خطوط جوجل (اختياري، تتوافق مع style.css) -->
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- شاشة البداية -->
+    <section id="home" class="screen active">
+      <h1>🎉 كوكو وأصدقاء الحروف 🎉</h1>
+      <div class="characters">
+        <button onclick="showScreen('koko')">
+          <img src="src/assets/koko.png" alt="كوكو">
+          <span>كوكو يتعلّم</span>
+        </button>
+        <button onclick="showScreen('ahmad')">
+          <img src="src/assets/ahmad.png" alt="أحمد">
+          <span>أحمد يلعب البازل</span>
+        </button>
+        <button onclick="showScreen('sarah')">
+          <img src="src/assets/sarah.png" alt="سارة">
+          <span>سارة تُلوّن</span>
+        </button>
+      </div>
+    </section>
 
-    <!-- ملف الستايل النهائي (من مجلد public) -->
-    <link rel="stylesheet" href="/style.css" />
-  </head>
-  <body class="font-arabic">
-    <!-- React root — لا تضع محتوى ثابت هنا -->
-    <div id="root"></div>
+    <!-- كوكو: ترتيب الحروف -->
+    <section id="koko" class="screen">
+      <h2>🐦 كوكو يتعلّم</h2>
+      <div id="letters" class="letters"></div>
+      <button onclick="goHome()">رجوع</button>
+    </section>
 
-    <!-- السكربت الرئيسي للتطبيق (تايب موديول لأن المشروع Vite + React + TSX) -->
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
+    <!-- أحمد: البازل -->
+    <section id="ahmad" class="screen">
+      <h2>👦 أحمد يلعب البازل</h2>
+      <div id="puzzle-board"></div>
+      <button id="next-puzzle">التالي</button>
+      <button onclick="goHome()">رجوع</button>
+    </section>
+
+    <!-- سارة: التلوين -->
+    <section id="sarah" class="screen">
+      <h2>👧 سارة تُلوّن</h2>
+      <div id="coloring-gallery"></div>
+      <button onclick="goHome()">رجوع</button>
+    </section>
+
+  </div>
+  <script src="scripts.js"></script>
+</body>
 </html>
