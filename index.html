@@ -1,48 +1,22 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ar" dir="rtl">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>KokoLand – عالم كوكو - لعبة للأطفال</title>
 
-  <title>كوكو وأصدقاء الحروف | Koko & Friends</title>
+    <!-- خطوط جوجل (اختياري، تتوافق مع style.css) -->
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
 
-  <!-- ✅ خطوط Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- ملف الستايل النهائي (من مجلد public) -->
+    <link rel="stylesheet" href="/style.css" />
+  </head>
+  <body class="font-arabic">
+    <!-- React root — لا تضع محتوى ثابت هنا -->
+    <div id="root"></div>
 
-  <!-- ✅ ملف CSS النهائي بعد Tailwind -->
-  <link rel="stylesheet" href="/src/index.css" />
-
-</head>
-<body class="font-arabic bg-gray-50 text-gray-800 text-center">
-
-  <!-- زر تغيير اللغة -->
-  <button class="lang-toggle">EN / AR</button>
-
-  <div class="container">
-    <h1 class="text-3xl font-bold mt-10">مرحباً بكم في لعبة كوكو وأصدقاء الحروف</h1>
-    <p class="mt-4 text-lg">اسحب وأسقط الحروف لتتعلم بطريقة ممتعة 🎉</p>
-
-    <!-- مناطق الإسقاط -->
-    <div class="drop-zones mt-10">
-      <div class="drop-zone">أ</div>
-      <div class="drop-zone">ب</div>
-      <div class="drop-zone">ت</div>
-    </div>
-
-    <!-- العناصر القابلة للسحب -->
-    <div class="draggable-items">
-      <img src="assets/apple.png" alt="تفاحة" class="draggable">
-      <img src="assets/duck.png" alt="بطة" class="draggable">
-      <img src="assets/camel.png" alt="جمل" class="draggable">
-    </div>
-
-    <!-- رسالة النجاح -->
-    <div id="success-message" class="success-message hidden">
-      🎉 أحسنت! لقد أنجزت المهمة
-    </div>
-  </div>
-
-  <!-- ✅ سكربت اللعبة -->
-  <script src="/src/main.js"></script>
-</body>
+    <!-- السكربت الرئيسي للتطبيق (تايب موديول لأن المشروع Vite + React + TSX) -->
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
 </html>
