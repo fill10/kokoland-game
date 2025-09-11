@@ -2,12 +2,12 @@
 module.exports = {
   content: [
     "./index.html",
-    "./src/**/*.{js,ts,jsx,tsx}", // عدل حسب مسار ملفاتك
+    "./src/**/*.{js,ts,jsx,tsx}", 
   ],
   theme: {
     extend: {
       fontFamily: {
-        arabic: ['Amiri', 'Cairo', 'sans-serif'],
+        arabic: ["Cairo", "Amiri", "sans-serif"],
       },
     },
   },
