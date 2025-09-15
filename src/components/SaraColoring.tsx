@@ -6,16 +6,30 @@ interface ColoringImage {
 }
 
 const coloringImages: ColoringImage[] = [
-  { src: "/assets/images/horse-outline.png", name: "حصان" },
-  { src: "/assets/images/sheep-outline.png", name: "خروف" },
-  { src: "/assets/images/chicken-outline.png", name: "دجاجة" },
-  { src: "/assets/images/pomegranate-outline.png", name: "رمانة" },
-  { src: "/assets/images/giraffe-outline.png", name: "زرافة" },
-  // 🔔 يمكنك إضافة المزيد من رسومات التلوين هنا
+  { src: "/assets/coloring/cat.webp", name: "قطة" },
+  { src: "/assets/coloring/coloring-5.webp", name: "رسمة إضافية" },
+  { src: "/assets/coloring/duck.webp", name: "بطة" },
+  { src: "/assets/coloring/fish.webp", name: "سمكة" },
+  { src: "/assets/coloring/horse.webp", name: "حصان" },
+  { src: "/assets/coloring/koko.webp", name: "كوكو" },
+  { src: "/assets/coloring/rabbit.png", name: "أرنب" },
+  { src: "/assets/coloring/to-1.webp", name: "رسم للتلوين 1" },
+  { src: "/assets/coloring/to-2.webp", name: "رسم للتلوين 2" },
+  { src: "/assets/coloring/to-3.webp", name: "رسم للتلوين 3" },
+  { src: "/assets/coloring/to-4.webp", name: "رسم للتلوين 4" },
 ];
 
 function SaraColoring() {
   const [selectedImage, setSelectedImage] = useState<ColoringImage | null>(null);
+
+  const handleDownload = (src: string) => {
+    const link = document.createElement("a");
+    link.href = src;
+    link.download = "coloring-image.png";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
 
   return (
     <div className="p-6 font-arabic text-center">
@@ -60,7 +74,7 @@ function SaraColoring() {
               ⬅️ الرجوع
             </button>
             <button
-              onClick={() => alert("📥 تم تنزيل صورة التلوين للطباعة!")}
+              onClick={() => handleDownload(selectedImage.src)}
               className="bg-green-500 text-white px-6 py-3 rounded-2xl shadow hover:bg-green-600 transition-all duration-300"
             >
               ⬇️ تحميل للطباعة
