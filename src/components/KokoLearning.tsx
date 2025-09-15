@@ -2,13 +2,36 @@ import React, { useState } from "react";
 
 // أصوات الحروف (تأكد من وجود الملفات في src/assets/sounds/)
 const letters = [
-  { letter: "أ", sound: "/assets/sounds/alif.mp3" },
-  { letter: "ب", sound: "/assets/sounds/ba.mp3" },
-  { letter: "ت", sound: "/assets/sounds/ta.mp3" },
-  { letter: "ث", sound: "/assets/sounds/tha.mp3" },
-  { letter: "ج", sound: "/assets/sounds/jeem.mp3" },
-  // 🔔 أكمل بقية الحروف بنفس الطريقة حتى (ي)
+  { letter: "أ", sound: "/assets/sounds/a.mp3" },
+  { letter: "ب", sound: "/assets/sounds/b.mp3" },
+  { letter: "ت", sound: "/assets/sounds/t.mp3" },
+  { letter: "ث", sound: "/assets/sounds/th.mp3" },
+  { letter: "ج", sound: "/assets/sounds/ga.mp3" },
+  { letter: "ح", sound: "/assets/sounds/h.mp3" },
+  { letter: "خ", sound: "/assets/sounds/ka.mp3" },
+  { letter: "د", sound: "/assets/sounds/d.mp3" },
+  { letter: "ذ", sound: "/assets/sounds/tha.mp3" },
+  { letter: "ر", sound: "/assets/sounds/ra.mp3" },
+  { letter: "ز", sound: "/assets/sounds/za.mp3" },
+  { letter: "س", sound: "/assets/sounds/sa.mp3" },
+  { letter: "ش", sound: "/assets/sounds/sha.mp3" },
+  { letter: "ص", sound: "/assets/sounds/sa.mp3" },
+  { letter: "ض", sound: "/assets/sounds/da.mp3" },
+  { letter: "ط", sound: "/assets/sounds/taa.mp3" },
+  { letter: "ظ", sound: "/assets/sounds/za2.mp3" },
+  { letter: "ع", sound: "/assets/sounds/aa.mp3" },
+  { letter: "غ", sound: "/assets/sounds/kha.mp3" },
+  { letter: "ف", sound: "/assets/sounds/fa.mp3" },
+  { letter: "ق", sound: "/assets/sounds/qaa.mp3" },
+  { letter: "ك", sound: "/assets/sounds/kaa.mp3" },
+  { letter: "ل", sound: "/assets/sounds/la.mp3" },
+  { letter: "م", sound: "/assets/sounds/ma.mp3" },
+  { letter: "ن", sound: "/assets/sounds/na.mp3" },
+  { letter: "هـ", sound: "/assets/sounds/haa.mp3" },
+  { letter: "و", sound: "/assets/sounds/wa.mp3" },
+  { letter: "ي", sound: "/assets/sounds/ya.mp3" },
 ];
+
 
 function KokoLearning() {
   const [sorted, setSorted] = useState<string[]>([]);
