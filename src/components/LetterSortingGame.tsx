@@ -7,47 +7,49 @@ type Letter = {
   sound: string;
 };
 
+// المستويات + أصواتها حسب الأسماء الفعلية
 const levels: Letter[][] = [
   [
-    { id: 1, char: "أ", sound: "/sounds/a.mp3" },
-    { id: 2, char: "ب", sound: "/sounds/b.mp3" },
-    { id: 3, char: "ت", sound: "/sounds/t.mp3" },
-    { id: 4, char: "ث", sound: "/sounds/th.mp3" }
+    { id: 1, char: "أ", sound: "/assets/sounds/a.mp3" },
+    { id: 2, char: "ب", sound: "/assets/sounds/b.mp3" },
+    { id: 3, char: "ت", sound: "/assets/sounds/t.mp3" },
+    { id: 4, char: "ث", sound: "/assets/sounds/th.mp3" }
   ],
   [
-    { id: 5, char: "ج", sound: "/sounds/ga.mp3" },
-    { id: 6, char: "ح", sound: "/sounds/h.mp3" },
-    { id: 7, char: "خ", sound: "/sounds/ka.mp3" },
-    { id: 8, char: "د", sound: "/sounds/d.mp3" }
+    { id: 5, char: "ج", sound: "/assets/sounds/ga.mp3" },
+    { id: 6, char: "ح", sound: "/assets/sounds/h.mp3" },
+    { id: 7, char: "خ", sound: "/assets/sounds/ka.mp3" },
+    { id: 8, char: "د", sound: "/assets/sounds/d.mp3" }
   ],
   [
-    { id: 9, char: "ذ", sound: "/sounds/tha.mp3" },
-    { id: 10, char: "ر", sound: "/sounds/ra.mp3" },
-    { id: 11, char: "ز", sound: "/sounds/za.mp3" },
-    { id: 12, char: "س", sound: "/sounds/saa.mp3" }
+    { id: 9, char: "ذ", sound: "/assets/sounds/tha.mp3" },
+    { id: 10, char: "ر", sound: "/assets/sounds/ra.mp3" },
+    { id: 11, char: "ز", sound: "/assets/sounds/za.mp3" },
+    { id: 12, char: "س", sound: "/assets/sounds/sa.mp3" }
   ],
   [
-    { id: 13, char: "ش", sound: "/sounds/sha.mp3" },
-    { id: 14, char: "ص", sound: "/sounds/sa.mp3" },
-    { id: 15, char: "ض", sound: "/sounds/da.mp3" },
-    { id: 16, char: "ط", sound: "/sounds/taa.mp3" }
+    { id: 13, char: "ش", sound: "/assets/sounds/sha.mp3" },
+    { id: 14, char: "ص", sound: "/assets/sounds/sa.mp3" },
+    { id: 15, char: "ض", sound: "/assets/sounds/da.mp3" },
+    { id: 16, char: "ط", sound: "/assets/sounds/ta2.mp3" }
   ],
   [
-    { id: 17, char: "ع", sound: "/sounds/aa.mp3" },
-    { id: 18, char: "غ", sound: "/sounds/kha.mp3" },
-    { id: 19, char: "ف", sound: "/sounds/fa.mp3" },
-    { id: 20, char: "ق", sound: "/sounds/gaa.mp3" }
+    { id: 17, char: "ظ", sound: "/assets/sounds/za2.mp3" },
+    { id: 18, char: "ع", sound: "/assets/sounds/aa.mp3" },
+    { id: 19, char: "غ", sound: "/assets/sounds/kha.mp3" },
+    { id: 20, char: "ف", sound: "/assets/sounds/fa.mp3" }
   ],
   [
-    { id: 21, char: "ك", sound: "/sounds/kaa.mp3" },
-    { id: 22, char: "ل", sound: "/sounds/la.mp3" },
-    { id: 23, char: "م", sound: "/sounds/ma.mp3" },
-    { id: 24, char: "ن", sound: "/sounds/na.mp3" }
+    { id: 21, char: "ق", sound: "/assets/sounds/qaa.mp3" },
+    { id: 22, char: "ك", sound: "/assets/sounds/kaa.mp3" },
+    { id: 23, char: "ل", sound: "/assets/sounds/la.mp3" },
+    { id: 24, char: "م", sound: "/assets/sounds/ma.mp3" }
   ],
   [
-    { id: 25, char: "هـ", sound: "/sounds/haa.mp3" },
-    { id: 26, char: "و", sound: "/sounds/wa.mp3" },
-    { id: 27, char: "ي", sound: "/sounds/ya.mp3" }
+    { id: 25, char: "ن", sound: "/assets/sounds/na.mp3" },
+    { id: 26, char: "هـ", sound: "/assets/sounds/haa.mp3" },
+    { id: 27, char: "و", sound: "/assets/sounds/wa.mp3" },
+    { id: 28, char: "ي", sound: "/assets/sounds/ya.mp3" }
   ]
 ];
 
@@ -75,30 +77,42 @@ const LetterSortingGame: React.FC = () => {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-pink-100 via-blue-50 to-yellow-100 p-4">
-      <h1 className="text-3xl font-bold text-purple-600 mb-6 font-arabic">
-        لعبة ترتيب الحروف - المستوى {currentLevel + 1}
+      <h1 className="text-3xl font-bold text-purple-600 mb-6 font-arabic drop-shadow-lg">
+        🎲 لعبة ترتيب الحروف - المستوى {currentLevel + 1}
       </h1>
 
+      {/* شبكة الحروف */}
       <div className="grid grid-cols-2 gap-6 mb-6">
         {levels[currentLevel].map((letter) => (
           <motion.div
             key={letter.id}
             onClick={() => playSound(letter.sound)}
-            className="bg-white w-48 h-48 flex items-center justify-center rounded-2xl shadow-lg cursor-pointer hover:shadow-xl hover:scale-105 transition-transform duration-300 border-4 border-purple-300"
-            whileTap={{ scale: 0.95 }}
+            className="bg-white w-48 h-48 flex items-center justify-center rounded-2xl shadow-lg cursor-pointer border-4 border-purple-300"
+            whileTap={{ scale: 0.85, rotate: -5 }}
+            whileHover={{ scale: 1.05 }}
+            animate={{
+              y: [0, -5, 0],
+              transition: { repeat: Infinity, duration: 2, ease: "easeInOut" }
+            }}
           >
-            <span className="text-7xl font-bold text-purple-700">{letter.char}</span>
+            <span className="text-7xl font-bold text-purple-700 drop-shadow-md">
+              {letter.char}
+            </span>
           </motion.div>
         ))}
       </div>
 
-      <button
+      {/* زر إنهاء المستوى */}
+      <motion.button
         onClick={completeLevel}
-        className="bg-purple-600 text-white px-8 py-3 rounded-full shadow-lg hover:bg-purple-700 hover:shadow-xl transition-all duration-300 font-arabic"
+        className="bg-purple-600 text-white px-8 py-3 rounded-full shadow-lg hover:bg-purple-700 transition-all duration-300 font-arabic"
+        whileTap={{ scale: 0.9 }}
+        whileHover={{ scale: 1.1 }}
       >
         إنهاء المستوى ✅
-      </button>
+      </motion.button>
 
+      {/* نافذة النجاح */}
       <AnimatePresence>
         {showSuccess && (
           <motion.div
@@ -113,16 +127,22 @@ const LetterSortingGame: React.FC = () => {
               exit={{ scale: 0.8 }}
               className="bg-white rounded-2xl shadow-xl p-8 w-80 text-center"
             >
-              <h2 className="text-2xl font-bold text-green-600 mb-4">🎉 أحسنت!</h2>
+              <h2 className="text-2xl font-bold text-green-600 mb-4 animate-bounce">
+                🎉 أحسنت!
+              </h2>
               <p className="text-lg text-gray-700 mb-6">
                 لقد أنهيت المستوى {currentLevel + 1} بنجاح!
               </p>
-              <button
+              <motion.button
                 onClick={nextLevel}
                 className="bg-green-500 text-white px-6 py-2 rounded-full shadow-md hover:bg-green-600 transition-all duration-300"
+                whileTap={{ scale: 0.9 }}
+                whileHover={{ scale: 1.1 }}
               >
-                {currentLevel < levels.length - 1 ? "المستوى التالي ⏭" : "إنهاء اللعبة 🎯"}
-              </button>
+                {currentLevel < levels.length - 1
+                  ? "المستوى التالي ⏭"
+                  : "إنهاء اللعبة 🎯"}
+              </motion.button>
             </motion.div>
           </motion.div>
         )}
