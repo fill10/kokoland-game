@@ -1,6 +1,6 @@
 body {
-  font-family: "Tajawal", sans-serif;
-  background: #f9f9ff;
+  font-family: 'Cairo', sans-serif;
+  background: linear-gradient(to bottom, #fff7f9, #f3e8ff);
   margin: 0;
   padding: 0;
   text-align: center;
@@ -8,8 +8,26 @@ body {
 }
 
 h1, h2 {
+   text-align: center;
   color: #333;
   margin: 20px 0;
+}
+button {
+  cursor: pointer;
+  transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+button:hover {
+  transform: scale(1.05);
+}
+
+.grid button {
+  background: #fff;
+  border: 2px solid #ddd;
+}
+
+.bg-green-200 {
+  background-color: #bbf7d0 !important;
 }
 
 .screen {
