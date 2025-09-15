@@ -18,7 +18,7 @@ const letters = [
   { letter: "ص", sound: "/assets/sounds/sa.mp3" },
   { letter: "ض", sound: "/assets/sounds/da.mp3" },
   { letter: "ط", sound: "/assets/sounds/taa.mp3" },
-  { letter: "ظ", sound: "/assets/sounds/za2.mp3" },
+  { letter: "ظ", sound: "/assets/sounds/ta2.mp3" },
   { letter: "ع", sound: "/assets/sounds/aa.mp3" },
   { letter: "غ", sound: "/assets/sounds/kha.mp3" },
   { letter: "ف", sound: "/assets/sounds/fa.mp3" },
