@@ -6,10 +6,10 @@ interface PuzzleImage {
 }
 
 const puzzles: PuzzleImage[] = [
-  { src: "/assets/images/apple.png", word: "تفاحة" },
-  { src: "/assets/images/duck.png", word: "بطة" },
-  { src: "/assets/images/camel.png", word: "جمل" },
-  // 🔔 أضف بقية صور البازل هنا
+  { src: new URL("../assets/images/apple.png", import.meta.url).href, word: "تفاحة" },
+  { src: new URL("../assets/images/duck.png", import.meta.url).href, word: "بطة" },
+  { src: new URL("../assets/images/camel.png", import.meta.url).href, word: "جمل" },
+  // 🔔 أضف بقية صور البازل هنا بنفس الصيغة
 ];
 
 function AhmedPuzzle() {
@@ -20,6 +20,9 @@ function AhmedPuzzle() {
 
   const handleSolve = () => {
     setSolved(true);
+    // تشغيل صوت نجاح عند الحل
+    const audio = new Audio("/sounds/success.mp3");
+    audio.play();
   };
 
   const handleNext = () => {
