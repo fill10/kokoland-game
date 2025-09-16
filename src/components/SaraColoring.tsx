@@ -1,88 +1,162 @@
-// kokoland-game/src/components/SaraColoring.tsx
-import React, { useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 
 interface ColoringImage {
   src: string;
   name: string;
 }
 
-/**
- * استخدمنا new URL(...) لكي يتعرف Vite على الأصول داخل src/
- * (مجلد الصور لديك: src/assets/coloring/)
- */
 const coloringImages: ColoringImage[] = [
-  { src: new URL("../assets/coloring/cat.webp", import.meta.url).href, name: "قطة" },
-  { src: new URL("../assets/coloring/coloring-5.webp", import.meta.url).href, name: "رسمة إضافية" },
-  { src: new URL("../assets/coloring/duck.webp", import.meta.url).href, name: "بطة" },
-  { src: new URL("../assets/coloring/fish.webp", import.meta.url).href, name: "سمكة" },
   { src: new URL("../assets/coloring/horse.webp", import.meta.url).href, name: "حصان" },
-  { src: new URL("../assets/coloring/koko.webp", import.meta.url).href, name: "كوكو" },
+  { src: new URL("../assets/coloring/sheep.webp", import.meta.url).href, name: "خروف" },
+  { src: new URL("../assets/coloring/chicken.webp", import.meta.url).href, name: "دجاجة" },
+  { src: new URL("../assets/coloring/pomegranate.webp", import.meta.url).href, name: "رمانة" },
+  { src: new URL("../assets/coloring/giraffe.webp", import.meta.url).href, name: "زرافة" },
+  { src: new URL("../assets/coloring/cat.webp", import.meta.url).href, name: "قط" },
+  { src: new URL("../assets/coloring/fish.webp", import.meta.url).href, name: "سمكة" },
   { src: new URL("../assets/coloring/rabbit.png", import.meta.url).href, name: "أرنب" },
-  { src: new URL("../assets/coloring/to-1.webp", import.meta.url).href, name: "رسم 1" },
-  { src: new URL("../assets/coloring/to-2.webp", import.meta.url).href, name: "رسم 2" },
-  { src: new URL("../assets/coloring/to-3.webp", import.meta.url).href, name: "رسم 3" },
-  { src: new URL("../assets/coloring/to-4.webp", import.meta.url).href, name: "رسم 4" },
 ];
 
-const SUCCESS_SOUND = "/sounds/success.mp3"; // ملفك في public/sounds/success.mp3
+// 🔊 صوت تشجيع
+const cheerSound = new Audio(new URL("../assets/sounds/cheer.mp3", import.meta.url).href);
 
-export default function SaraColoring(): JSX.Element {
+function SaraColoring() {
   const [selectedImage, setSelectedImage] = useState<ColoringImage | null>(null);
-  const [showSuccess, setShowSuccess] = useState(false);
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const ctxRef = useRef<CanvasRenderingContext2D | null>(null);
+  const imgRef = useRef<HTMLImageElement | null>(null);
+  const [isDrawing, setIsDrawing] = useState(false);
+  const [color, setColor] = useState("#ff0000");
+  const [brushSize, setBrushSize] = useState(5);
+  const [history, setHistory] = useState<string[]>([]);
 
-  // تحميل الصورة (يحفظ للصيغة الأصلية)
-  const handleDownload = async (img: ColoringImage) => {
-    try {
-      // جلب الملف من المسار (يعمل لكل من public أو assets المعبأة)
-      const res = await fetch(img.src);
-      if (!res.ok) throw new Error("تعذر جلب الصورة");
-      const blob = await res.blob();
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      // اسم الملف للتحميل
-      const safeName = img.name.replace(/\s+/g, "_") || "coloring";
-      a.download = `${safeName}.png`;
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-      URL.revokeObjectURL(url);
+  // تحميل الصورة
+  const loadImage = () => {
+    if (selectedImage && canvasRef.current) {
+      const canvas = canvasRef.current;
+      const ctx = canvas.getContext("2d");
+      if (!ctx) return;
 
-      // شغل صوت النجاح (من public/sounds)
-      const audio = new Audio(SUCCESS_SOUND);
-      audio.volume = 1;
-      audio.play().catch(()=>{});
-
-      // أظهر نافذة النجاح الصغيرة
-      setShowSuccess(true);
-      setTimeout(() => setShowSuccess(false), 2200);
-    } catch (err) {
-      console.error(err);
-      alert("حدث خطأ أثناء التحميل، حاول مرة أخرى.");
+      const img = new Image();
+      img.src = selectedImage.src;
+      img.onload = () => {
+        canvas.width = 500;
+        canvas.height = 500;
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+        imgRef.current = img;
+        ctxRef.current = ctx;
+        setHistory([]); // تفريغ التاريخ عند إعادة تحميل
+      };
     }
   };
 
-  // طباعة الصورة (يفتح نافذة الطباعة)
-  const handlePrint = (img: ColoringImage) => {
-    const w = window.open("", "_blank");
-    if (!w) {
-      alert("تعذر فتح نافذة الطباعة.");
-      return;
+  useEffect(() => {
+    loadImage();
+  }, [selectedImage]);
+
+  // حفظ حالة للرسم قبل أي تغيير
+  const saveState = () => {
+    if (canvasRef.current) {
+      setHistory((prev) => [...prev, canvasRef.current!.toDataURL()]);
     }
-    w.document.write(`
-      <html>
-        <head>
-          <title>طباعة - ${img.name}</title>
-          <style>body{margin:0;display:flex;align-items:center;justify-content:center;height:100vh}img{max-width:95%;height:auto}</style>
-        </head>
-        <body>
-          <img src="${img.src}" alt="${img.name}" />
-        </body>
-      </html>
-    `);
-    w.document.close();
-    // صغير تأخير للتأكد من تحميل الصورة ثم طباعة
-    setTimeout(() => w.print(), 400);
+  };
+
+  // التراجع خطوة
+  const undo = () => {
+    if (history.length === 0 || !canvasRef.current) return;
+    const lastState = history[history.length - 1];
+    const img = new Image();
+    img.src = lastState;
+    img.onload = () => {
+      ctxRef.current?.clearRect(0, 0, canvasRef.current!.width, canvasRef.current!.height);
+      ctxRef.current?.drawImage(img, 0, 0);
+      setHistory((prev) => prev.slice(0, -1));
+    };
+  };
+
+  // بدء الرسم
+  const startDrawing = (e: React.MouseEvent | React.TouchEvent) => {
+    saveState();
+    setIsDrawing(true);
+    draw(e);
+  };
+
+  // إنهاء الرسم
+  const endDrawing = () => {
+    setIsDrawing(false);
+    ctxRef.current?.beginPath();
+  };
+
+  // عملية الرسم
+  const draw = (e: React.MouseEvent | React.TouchEvent) => {
+    if (!isDrawing || !ctxRef.current) return;
+
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const rect = canvas.getBoundingClientRect();
+    let x: number, y: number;
+
+    if ("touches" in e) {
+      x = e.touches[0].clientX - rect.left;
+      y = e.touches[0].clientY - rect.top;
+    } else {
+      x = e.clientX - rect.left;
+      y = e.clientY - rect.top;
+    }
+
+    ctxRef.current.lineWidth = brushSize;
+    ctxRef.current.lineCap = "round";
+    ctxRef.current.strokeStyle = color;
+
+    ctxRef.current.lineTo(x, y);
+    ctxRef.current.stroke();
+    ctxRef.current.beginPath();
+    ctxRef.current.moveTo(x, y);
+  };
+
+  // تحميل للطباعة
+  const handleDownload = () => {
+    if (!canvasRef.current) return;
+    cheerSound.play(); // 🎉 صوت تشجيع
+    const link = document.createElement("a");
+    link.download = `${selectedImage?.name || "coloring"}.png`;
+    link.href = canvasRef.current.toDataURL("image/png");
+    link.click();
+  };
+
+  // إعادة تعيين (مسح الكل)
+  const handleReset = () => {
+    loadImage();
+  };
+
+  // استخراج شهادة
+  const handleCertificate = () => {
+    const certWindow = window.open("", "_blank");
+    if (certWindow) {
+      certWindow.document.write(`
+        <html>
+          <head>
+            <title>شهادة إنجاز</title>
+            <style>
+              body { font-family: 'Arial', sans-serif; text-align: center; padding: 50px; }
+              .cert { border: 5px solid #ff69b4; padding: 40px; border-radius: 20px; }
+              h1 { color: #ff69b4; }
+              p { font-size: 20px; }
+            </style>
+          </head>
+          <body>
+            <div class="cert">
+              <h1>🎉 شهادة إنجاز 🎉</h1>
+              <p>أحسنت! لقد أنجزت رسمة رائعة في كوكو وأصدقاء الحروف</p>
+              <p>استمر في الإبداع والتعلم 🌟</p>
+            </div>
+            <button onclick="window.print()">🖨️ طباعة</button>
+          </body>
+        </html>
+      `);
+      certWindow.document.close();
+    }
   };
 
   return (
@@ -91,9 +165,9 @@ export default function SaraColoring(): JSX.Element {
 
       {!selectedImage ? (
         <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
-          {coloringImages.map((img, idx) => (
+          {coloringImages.map((img, index) => (
             <div
-              key={idx}
+              key={index}
               className="cursor-pointer bg-white rounded-2xl shadow hover:shadow-lg transition-all p-4"
               onClick={() => setSelectedImage(img)}
             >
@@ -108,49 +182,81 @@ export default function SaraColoring(): JSX.Element {
         </div>
       ) : (
         <div>
+          {/* Canvas */}
           <div className="bg-white rounded-2xl shadow-lg p-6 inline-block mb-6">
-            <img
-              src={selectedImage.src}
-              alt={selectedImage.name}
-              className="w-80 h-80 object-contain mx-auto"
+            <canvas
+              ref={canvasRef}
+              className="border-2 border-gray-300 rounded-lg"
+              onMouseDown={startDrawing}
+              onMouseUp={endDrawing}
+              onMouseMove={draw}
+              onMouseLeave={endDrawing}
+              onTouchStart={startDrawing}
+              onTouchEnd={endDrawing}
+              onTouchMove={draw}
             />
             <p className="mt-4 text-xl font-bold text-gray-700">{selectedImage.name}</p>
           </div>
 
-          <div className="space-x-4">
+          {/* أدوات التحكم */}
+          <div className="flex justify-center items-center gap-4 flex-wrap mb-6">
+            <label className="text-lg font-bold">🎨 اللون:</label>
+            <input
+              type="color"
+              value={color}
+              onChange={(e) => setColor(e.target.value)}
+              className="w-12 h-12 cursor-pointer"
+            />
+
+            <label className="text-lg font-bold">✏️ الفرشاة:</label>
+            <select
+              value={brushSize}
+              onChange={(e) => setBrushSize(Number(e.target.value))}
+              className="border px-2 py-1 rounded-lg"
+            >
+              <option value={3}>رفيعة</option>
+              <option value={6}>متوسطة</option>
+              <option value={12}>عريضة</option>
+            </select>
+          </div>
+
+          {/* الأزرار */}
+          <div className="flex justify-center gap-4 flex-wrap">
             <button
               onClick={() => setSelectedImage(null)}
-              className="bg-blue-500 text-white px-6 py-3 rounded-2xl shadow hover:bg-blue-600 transition-all duration-300"
+              className="bg-blue-500 text-white px-6 py-3 rounded-2xl shadow hover:bg-blue-600"
             >
               ⬅️ الرجوع
             </button>
-
             <button
-              onClick={() => handleDownload(selectedImage)}
-              className="bg-green-500 text-white px-6 py-3 rounded-2xl shadow hover:bg-green-600 transition-all duration-300"
+              onClick={handleReset}
+              className="bg-yellow-500 text-white px-6 py-3 rounded-2xl shadow hover:bg-yellow-600"
+            >
+              🗑️ مسح الكل
+            </button>
+            <button
+              onClick={undo}
+              className="bg-orange-500 text-white px-6 py-3 rounded-2xl shadow hover:bg-orange-600"
+            >
+              ↩️ تراجع
+            </button>
+            <button
+              onClick={handleDownload}
+              className="bg-green-500 text-white px-6 py-3 rounded-2xl shadow hover:bg-green-600"
             >
               ⬇️ تحميل للطباعة
             </button>
-
             <button
-              onClick={() => handlePrint(selectedImage)}
-              className="bg-indigo-500 text-white px-6 py-3 rounded-2xl shadow hover:bg-indigo-600 transition-all duration-300"
+              onClick={handleCertificate}
+              className="bg-pink-500 text-white px-6 py-3 rounded-2xl shadow hover:bg-pink-600"
             >
-              🖨️ طباعة
+              📜 شهادة إنجاز
             </button>
-          </div>
-        </div>
-      )}
-
-      {/* مودال رسالة النجاح الصغيرة */}
-      {showSuccess && (
-        <div className="fixed inset-0 flex items-center justify-center z-50 pointer-events-none">
-          <div className="bg-white/95 rounded-2xl p-6 shadow-xl border border-green-200 pointer-events-auto">
-            <h3 className="text-green-600 font-bold text-lg">✅ تم التحميل</h3>
-            <p className="text-sm text-gray-700">تم حفظ صورة التلوين بنجاح.</p>
           </div>
         </div>
       )}
     </div>
   );
 }
+
+export default SaraColoring;
