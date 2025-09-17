@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
 type Letter = {
@@ -7,7 +7,7 @@ type Letter = {
   sound: string;
 };
 
-// المستويات + أصواتها حسب الأسماء الفعلية
+// المستويات + أصواتها
 const levels: Letter[][] = [
   [
     { id: 1, char: "أ", sound: "/assets/sounds/a.mp3" },
@@ -74,6 +74,15 @@ const LetterSortingGame: React.FC = () => {
       alert("🎉 لقد أنهيت جميع المستويات!");
     }
   };
+
+  // تشغيل صوت التشجيع عند النجاح
+  useEffect(() => {
+    if (showSuccess) {
+      const successAudio = new Audio("/assets/sounds/success.mp3");
+      successAudio.volume = 1.0;
+      successAudio.play().catch(() => {});
+    }
+  }, [showSuccess]);
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-pink-100 via-blue-50 to-yellow-100 p-4">

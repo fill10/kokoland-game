@@ -5,96 +5,80 @@ interface ColoringImage {
   name: string;
 }
 
-const coloringImages: ColoringImage[] = [
-  { src: new URL("../assets/coloring/horse.webp", import.meta.url).href, name: "حصان" },
-  { src: new URL("../assets/coloring/sheep.webp", import.meta.url).href, name: "خروف" },
-  { src: new URL("../assets/coloring/chicken.webp", import.meta.url).href, name: "دجاجة" },
-  { src: new URL("../assets/coloring/pomegranate.webp", import.meta.url).href, name: "رمانة" },
-  { src: new URL("../assets/coloring/giraffe.webp", import.meta.url).href, name: "زرافة" },
-  { src: new URL("../assets/coloring/cat.webp", import.meta.url).href, name: "قط" },
-  { src: new URL("../assets/coloring/fish.webp", import.meta.url).href, name: "سمكة" },
-  { src: new URL("../assets/coloring/rabbit.png", import.meta.url).href, name: "أرنب" },
-];
+interface ColoringCanvasProps {
+  title: string; // العنوان (سارة تلوّن - أحمد يلوّن)
+  images: ColoringImage[]; // قائمة الصور
+}
 
-// 🔊 صوت تشجيع
 const cheerSound = new Audio(new URL("../assets/sounds/cheer.mp3", import.meta.url).href);
 
-function SaraColoring() {
+function ColoringCanvas({ title, images }: ColoringCanvasProps) {
   const [selectedImage, setSelectedImage] = useState<ColoringImage | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const ctxRef = useRef<CanvasRenderingContext2D | null>(null);
-  const imgRef = useRef<HTMLImageElement | null>(null);
   const [isDrawing, setIsDrawing] = useState(false);
   const [color, setColor] = useState("#ff0000");
   const [brushSize, setBrushSize] = useState(5);
   const [history, setHistory] = useState<string[]>([]);
 
-  // تحميل الصورة
-  const loadImage = () => {
-    if (selectedImage && canvasRef.current) {
-      const canvas = canvasRef.current;
-      const ctx = canvas.getContext("2d");
+  // تحميل صورة التلوين
+  const loadImage = (imgSrc: string) => {
+    if (canvasRef.current) {
+      const ctx = canvasRef.current.getContext("2d");
       if (!ctx) return;
 
       const img = new Image();
-      img.src = selectedImage.src;
+      img.src = imgSrc;
       img.onload = () => {
-        canvas.width = 500;
-        canvas.height = 500;
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-        imgRef.current = img;
+        canvasRef.current!.width = 500;
+        canvasRef.current!.height = 500;
+        ctx.clearRect(0, 0, 500, 500);
+        ctx.drawImage(img, 0, 0, 500, 500);
         ctxRef.current = ctx;
-        setHistory([]); // تفريغ التاريخ عند إعادة تحميل
+        setHistory([]);
       };
     }
   };
 
   useEffect(() => {
-    loadImage();
+    if (selectedImage) {
+      loadImage(selectedImage.src);
+    }
   }, [selectedImage]);
 
-  // حفظ حالة للرسم قبل أي تغيير
   const saveState = () => {
     if (canvasRef.current) {
       setHistory((prev) => [...prev, canvasRef.current!.toDataURL()]);
     }
   };
 
-  // التراجع خطوة
   const undo = () => {
     if (history.length === 0 || !canvasRef.current) return;
     const lastState = history[history.length - 1];
     const img = new Image();
     img.src = lastState;
     img.onload = () => {
-      ctxRef.current?.clearRect(0, 0, canvasRef.current!.width, canvasRef.current!.height);
+      ctxRef.current?.clearRect(0, 0, 500, 500);
       ctxRef.current?.drawImage(img, 0, 0);
       setHistory((prev) => prev.slice(0, -1));
     };
   };
 
-  // بدء الرسم
   const startDrawing = (e: React.MouseEvent | React.TouchEvent) => {
     saveState();
     setIsDrawing(true);
     draw(e);
   };
 
-  // إنهاء الرسم
   const endDrawing = () => {
     setIsDrawing(false);
     ctxRef.current?.beginPath();
   };
 
-  // عملية الرسم
   const draw = (e: React.MouseEvent | React.TouchEvent) => {
-    if (!isDrawing || !ctxRef.current) return;
+    if (!isDrawing || !ctxRef.current || !canvasRef.current) return;
 
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-
-    const rect = canvas.getBoundingClientRect();
+    const rect = canvasRef.current.getBoundingClientRect();
     let x: number, y: number;
 
     if ("touches" in e) {
@@ -115,22 +99,19 @@ function SaraColoring() {
     ctxRef.current.moveTo(x, y);
   };
 
-  // تحميل للطباعة
   const handleDownload = () => {
     if (!canvasRef.current) return;
-    cheerSound.play(); // 🎉 صوت تشجيع
+    cheerSound.play();
     const link = document.createElement("a");
     link.download = `${selectedImage?.name || "coloring"}.png`;
     link.href = canvasRef.current.toDataURL("image/png");
     link.click();
   };
 
-  // إعادة تعيين (مسح الكل)
   const handleReset = () => {
-    loadImage();
+    if (selectedImage) loadImage(selectedImage.src);
   };
 
-  // استخراج شهادة
   const handleCertificate = () => {
     const certWindow = window.open("", "_blank");
     if (certWindow) {
@@ -161,28 +142,23 @@ function SaraColoring() {
 
   return (
     <div className="p-6 font-arabic text-center">
-      <h1 className="text-3xl font-bold text-pink-600 mb-6">🎨 سارة تُلون</h1>
+      <h1 className="text-3xl font-bold text-pink-600 mb-6">{title}</h1>
 
       {!selectedImage ? (
         <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
-          {coloringImages.map((img, index) => (
+          {images.map((img, index) => (
             <div
               key={index}
               className="cursor-pointer bg-white rounded-2xl shadow hover:shadow-lg transition-all p-4"
               onClick={() => setSelectedImage(img)}
             >
-              <img
-                src={img.src}
-                alt={img.name}
-                className="w-40 h-40 object-contain mx-auto"
-              />
+              <img src={img.src} alt={img.name} className="w-40 h-40 object-contain mx-auto" />
               <p className="mt-2 text-lg font-bold text-gray-700">{img.name}</p>
             </div>
           ))}
         </div>
       ) : (
         <div>
-          {/* Canvas */}
           <div className="bg-white rounded-2xl shadow-lg p-6 inline-block mb-6">
             <canvas
               ref={canvasRef}
@@ -201,19 +177,10 @@ function SaraColoring() {
           {/* أدوات التحكم */}
           <div className="flex justify-center items-center gap-4 flex-wrap mb-6">
             <label className="text-lg font-bold">🎨 اللون:</label>
-            <input
-              type="color"
-              value={color}
-              onChange={(e) => setColor(e.target.value)}
-              className="w-12 h-12 cursor-pointer"
-            />
+            <input type="color" value={color} onChange={(e) => setColor(e.target.value)} className="w-12 h-12 cursor-pointer" />
 
             <label className="text-lg font-bold">✏️ الفرشاة:</label>
-            <select
-              value={brushSize}
-              onChange={(e) => setBrushSize(Number(e.target.value))}
-              className="border px-2 py-1 rounded-lg"
-            >
+            <select value={brushSize} onChange={(e) => setBrushSize(Number(e.target.value))} className="border px-2 py-1 rounded-lg">
               <option value={3}>رفيعة</option>
               <option value={6}>متوسطة</option>
               <option value={12}>عريضة</option>
@@ -222,36 +189,11 @@ function SaraColoring() {
 
           {/* الأزرار */}
           <div className="flex justify-center gap-4 flex-wrap">
-            <button
-              onClick={() => setSelectedImage(null)}
-              className="bg-blue-500 text-white px-6 py-3 rounded-2xl shadow hover:bg-blue-600"
-            >
-              ⬅️ الرجوع
-            </button>
-            <button
-              onClick={handleReset}
-              className="bg-yellow-500 text-white px-6 py-3 rounded-2xl shadow hover:bg-yellow-600"
-            >
-              🗑️ مسح الكل
-            </button>
-            <button
-              onClick={undo}
-              className="bg-orange-500 text-white px-6 py-3 rounded-2xl shadow hover:bg-orange-600"
-            >
-              ↩️ تراجع
-            </button>
-            <button
-              onClick={handleDownload}
-              className="bg-green-500 text-white px-6 py-3 rounded-2xl shadow hover:bg-green-600"
-            >
-              ⬇️ تحميل للطباعة
-            </button>
-            <button
-              onClick={handleCertificate}
-              className="bg-pink-500 text-white px-6 py-3 rounded-2xl shadow hover:bg-pink-600"
-            >
-              📜 شهادة إنجاز
-            </button>
+            <button onClick={() => setSelectedImage(null)} className="bg-blue-500 text-white px-6 py-3 rounded-2xl shadow hover:bg-blue-600">⬅️ الرجوع</button>
+            <button onClick={handleReset} className="bg-yellow-500 text-white px-6 py-3 rounded-2xl shadow hover:bg-yellow-600">🗑️ مسح الكل</button>
+            <button onClick={undo} className="bg-orange-500 text-white px-6 py-3 rounded-2xl shadow hover:bg-orange-600">↩️ تراجع</button>
+            <button onClick={handleDownload} className="bg-green-500 text-white px-6 py-3 rounded-2xl shadow hover:bg-green-600">⬇️ تحميل للطباعة</button>
+            <button onClick={handleCertificate} className="bg-pink-500 text-white px-6 py-3 rounded-2xl shadow hover:bg-pink-600">📜 شهادة إنجاز</button>
           </div>
         </div>
       )}
@@ -259,4 +201,4 @@ function SaraColoring() {
   );
 }
 
-export default SaraColoring;
+export default ColoringCanvas;
