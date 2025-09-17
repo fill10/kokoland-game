@@ -1,3 +1,8 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* 🎨 تقدر تضيف ستايلك اليدوي بعد أو فوق */
 body {
   font-family: 'Cairo', sans-serif;
   background: linear-gradient(to bottom, #fff7f9, #f3e8ff);
@@ -8,104 +13,7 @@ body {
 }
 
 h1, h2 {
-   text-align: center;
+  text-align: center;
   color: #333;
   margin: 20px 0;
-}
-button {
-  cursor: pointer;
-  transition: transform 0.2s ease, background-color 0.2s ease;
-}
-
-button:hover {
-  transform: scale(1.05);
-}
-
-.grid button {
-  background: #fff;
-  border: 2px solid #ddd;
-}
-
-.bg-green-200 {
-  background-color: #bbf7d0 !important;
-}
-
-.screen {
-  display: none;
-  padding: 20px;
-}
-
-.screen.active {
-  display: block;
-}
-
-.characters {
-  display: flex;
-  justify-content: center;
-  gap: 20px;
-  flex-wrap: wrap;
-}
-
-.characters button {
-  background: white;
-  border: 2px solid #ddd;
-  border-radius: 15px;
-  padding: 10px;
-  cursor: pointer;
-  width: 160px;
-  transition: transform 0.2s;
-}
-
-.characters button:hover {
-  transform: scale(1.05);
-}
-
-.characters img {
-  width: 100px;
-  height: auto;
-}
-
-.letters {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 15px;
-  margin: 20px 0;
-}
-
-.letters button {
-  background: #fff;
-  border: 2px solid #333;
-  font-size: 22px;
-  padding: 15px 20px;
-  cursor: pointer;
-  border-radius: 10px;
-}
-
-#puzzle-board {
-  display: grid;
-  grid-template-columns: repeat(3, 100px);
-  grid-gap: 5px;
-  justify-content: center;
-  margin: 20px auto;
-}
-
-#puzzle-board img {
-  width: 100px;
-  height: 100px;
-  object-fit: cover;
-}
-
-#coloring-gallery {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 15px;
-}
-
-#coloring-gallery img {
-  width: 120px;
-  border: 2px solid #ccc;
-  border-radius: 10px;
-  cursor: pointer;
 }
