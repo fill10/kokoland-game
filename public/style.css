@@ -109,6 +109,28 @@ body {
   }
   .draggable {
     width: 100px;
-    height: 100px;
+    height: 100px; 
   }
+}
+
+/* ====== Letters ====== */
+.letters {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  align-items: center;
+}
+
+.drop-zones {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+}
+
+.draggable-items {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
 }
