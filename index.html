@@ -2,63 +2,82 @@
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="كوكو وأصدقاء الحروف | لعبة تعليمية للأطفال لتعلّم الحروف، الألوان، والبازل مع كوكو، أحمد، وسارة.">
-  <title>كوكو وأصدقاء الحروف | Kokoland Game</title>
-
-  <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
-
-  <!-- Styles -->
+  <title>كوكو وأصدقاء الحروف</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div id="app">
+  <h1 class="title">🎉 كوكو وأصدقاء الحروف 🎉</h1>
 
-    <!-- شاشة البداية -->
-    <section id="home" class="screen active">
-      <h1>🎉 كوكو وأصدقاء الحروف 🎉</h1>
-      <div class="characters">
-        <button onclick="showScreen('koko')">
-          <img src="src/assets/koko.png" alt="كوكو">
-          <span>كوكو يتعلّم</span>
-        </button>
-        <button onclick="showScreen('ahmad')">
-          <img src="src/assets/ahmad.png" alt="أحمد">
-          <span>أحمد يلعب البازل</span>
-        </button>
-        <button onclick="showScreen('sarah')">
-          <img src="src/assets/sarah.png" alt="سارة">
-          <span>سارة تُلوّن</span>
-        </button>
-      </div>
-    </section>
+  <div class="game-container">
+    <!-- قائمة الحروف -->
+    <div class="letters">
+      <img src="assets/letters/alif.png" class="letter" draggable="true" data-letter="أ">
+      <img src="assets/letters/baa.png" class="letter" draggable="true" data-letter="ب">
+      <img src="assets/letters/taa.png" class="letter" draggable="true" data-letter="ت">
+      <img src="assets/letters/thaa.png" class="letter" draggable="true" data-letter="ث">
+      <img src="assets/letters/jeem.png" class="letter" draggable="true" data-letter="ج">
+      <img src="assets/letters/haa.png" class="letter" draggable="true" data-letter="ح">
+      <img src="assets/letters/khaa.png" class="letter" draggable="true" data-letter="خ">
+      <img src="assets/letters/dal.png" class="letter" draggable="true" data-letter="د">
+      <img src="assets/letters/thaal.png" class="letter" draggable="true" data-letter="ذ">
+      <img src="assets/letters/raa.png" class="letter" draggable="true" data-letter="ر">
+      <img src="assets/letters/zay.png" class="letter" draggable="true" data-letter="ز">
+      <img src="assets/letters/seen.png" class="letter" draggable="true" data-letter="س">
+      <img src="assets/letters/sheen.png" class="letter" draggable="true" data-letter="ش">
+      <img src="assets/letters/sad.png" class="letter" draggable="true" data-letter="ص">
+      <img src="assets/letters/dhad.png" class="letter" draggable="true" data-letter="ض">
+      <img src="assets/letters/tah.png" class="letter" draggable="true" data-letter="ط">
+      <img src="assets/letters/dhah.png" class="letter" draggable="true" data-letter="ظ">
+      <img src="assets/letters/ain.png" class="letter" draggable="true" data-letter="ع">
+      <img src="assets/letters/ghain.png" class="letter" draggable="true" data-letter="غ">
+      <img src="assets/letters/faa.png" class="letter" draggable="true" data-letter="ف">
+      <img src="assets/letters/qaf.png" class="letter" draggable="true" data-letter="ق">
+      <img src="assets/letters/kaf.png" class="letter" draggable="true" data-letter="ك">
+      <img src="assets/letters/lam.png" class="letter" draggable="true" data-letter="ل">
+      <img src="assets/letters/meem.png" class="letter" draggable="true" data-letter="م">
+      <img src="assets/letters/noon.png" class="letter" draggable="true" data-letter="ن">
+      <img src="assets/letters/haa2.png" class="letter" draggable="true" data-letter="هـ">
+      <img src="assets/letters/waw.png" class="letter" draggable="true" data-letter="و">
+      <img src="assets/letters/yaa.png" class="letter" draggable="true" data-letter="ي">
+    </div>
 
-    <!-- كوكو: ترتيب الحروف -->
-    <section id="koko" class="screen">
-      <h2>🐦 كوكو يتعلّم</h2>
-      <div id="letters" class="letters"></div>
-      <button onclick="goHome()">رجوع</button>
-    </section>
-
-    <!-- أحمد: البازل -->
-    <section id="ahmad" class="screen">
-      <h2>👦 أحمد يلعب البازل</h2>
-      <div id="puzzle-board"></div>
-      <button id="next-puzzle">التالي</button>
-      <button onclick="goHome()">رجوع</button>
-    </section>
-
-    <!-- سارة: التلوين -->
-    <section id="sarah" class="screen">
-      <h2>👧 سارة تُلوّن</h2>
-      <div id="coloring-gallery"></div>
-      <button onclick="goHome()">رجوع</button>
-    </section>
-
+    <!-- مناطق الإفلات -->
+    <div class="dropzones">
+      <div class="dropzone" data-letter="أ">أ</div>
+      <div class="dropzone" data-letter="ب">ب</div>
+      <div class="dropzone" data-letter="ت">ت</div>
+      <div class="dropzone" data-letter="ث">ث</div>
+      <div class="dropzone" data-letter="ج">ج</div>
+      <div class="dropzone" data-letter="ح">ح</div>
+      <div class="dropzone" data-letter="خ">خ</div>
+      <div class="dropzone" data-letter="د">د</div>
+      <div class="dropzone" data-letter="ذ">ذ</div>
+      <div class="dropzone" data-letter="ر">ر</div>
+      <div class="dropzone" data-letter="ز">ز</div>
+      <div class="dropzone" data-letter="س">س</div>
+      <div class="dropzone" data-letter="ش">ش</div>
+      <div class="dropzone" data-letter="ص">ص</div>
+      <div class="dropzone" data-letter="ض">ض</div>
+      <div class="dropzone" data-letter="ط">ط</div>
+      <div class="dropzone" data-letter="ظ">ظ</div>
+      <div class="dropzone" data-letter="ع">ع</div>
+      <div class="dropzone" data-letter="غ">غ</div>
+      <div class="dropzone" data-letter="ف">ف</div>
+      <div class="dropzone" data-letter="ق">ق</div>
+      <div class="dropzone" data-letter="ك">ك</div>
+      <div class="dropzone" data-letter="ل">ل</div>
+      <div class="dropzone" data-letter="م">م</div>
+      <div class="dropzone" data-letter="ن">ن</div>
+      <div class="dropzone" data-letter="هـ">هـ</div>
+      <div class="dropzone" data-letter="و">و</div>
+      <div class="dropzone" data-letter="ي">ي</div>
+    </div>
   </div>
 
-  <!-- Scripts -->
-<script type="module" src="/scripts.js"></script>
+  <div id="congrats" class="hidden">
+    🎊 أحسنت! أنهيت جميع الحروف 🎊
+  </div>
+
+  <script type="module" src="scripts.js"></script>
 </body>
 </html>
