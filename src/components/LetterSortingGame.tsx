@@ -1,3 +1,19 @@
+import { useEffect } from "react";
+import { loadStage } from "../gameLogic";
+
+export default function LetterSortingGame() {
+  useEffect(() => {
+    loadStage(0); // تحميل أول مرحلة عند فتح القسم
+  }, []);
+
+  return (
+    <div className="p-4">
+      <h2 className="text-xl font-bold mb-4 text-center">🅰️ لعبة الحروف</h2>
+      <div id="gameBoard" className="board grid grid-cols-5 gap-2 mb-4"></div>
+      <div id="draggables" className="draggables flex flex-wrap gap-2"></div>
+    </div>
+  );
+}
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
