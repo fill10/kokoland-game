@@ -1,3 +1,14 @@
+import { onCorrectDrop, onWrongDrop } from "./gameLogic";
+
+// مثال: لما يتحقق التطابق الصحيح
+function handleDropSuccess() {
+  onCorrectDrop();   // يزيد النقاط + صوت success + فحص نهاية المرحلة
+}
+
+// مثال: لما يكون خطأ
+function handleDropError() {
+  onWrongDrop();     // صوت error
+}
 import letterSounds from "./assets/letterSounds";
 import generalSounds from "./assets/generalSounds";
 
