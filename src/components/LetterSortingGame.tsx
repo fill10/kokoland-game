@@ -1,124 +1,110 @@
-import { useEffect, useState } from "react";
-import { loadStage } from "../gameLogic";
-import confetti from "canvas-confetti";
+import React, { useState, useEffect } from "react";
+import Confetti from "react-confetti";
 
-export default function LetterSortingGame() {
-  const totalStages = 5; // 🟢 عدل الرقم حسب عدد المراحل عندك
-  const [stage, setStage] = useState(0);
+const LetterSortingGame = () => {
+  const totalLevels = 5; // ✅ غيّر العدد حسب عدد المراحل الفعلي
+  const [level, setLevel] = useState(1);
   const [completed, setCompleted] = useState(false);
+  const [showConfetti, setShowConfetti] = useState(false);
 
+  // 🎵 صوت التهنئة
+  const playSuccessSound = () => {
+    const audio = new Audio("/assets/success.mp3"); // ضع ملف الصوت داخل مجلد assets
+    audio.play();
+  };
+
+  // 🟢 استدعاء عند إكمال كل المستويات
   useEffect(() => {
-    if (stage < totalStages) {
-      loadStage(stage);
-
-      // 🎵 تشغيل صوت انتقال
-      const audio = new Audio("/sounds/next.mp3");
-      audio.play();
-    }
-
-    // 🎉 عند آخر مرحلة: عرض تهنئة
-    if (stage === totalStages) {
+    if (level > totalLevels) {
       setCompleted(true);
-      const success = new Audio("/sounds/success.mp3");
-      success.play();
+      setShowConfetti(true);
+      playSuccessSound();
 
-      // تأثير Confetti
-      confetti({
-        particleCount: 120,
-        spread: 70,
-        origin: { y: 0.6 },
-      });
+      // confetti يختفي بعد 6 ثوانٍ
+      setTimeout(() => setShowConfetti(false), 6000);
     }
-  }, [stage]);
+  }, [level]);
 
-  const handleNextStage = () => {
-    if (stage < totalStages) {
-      setStage((prev) => prev + 1);
-    }
-  };
-
-  const handlePreviousStage = () => {
-    setStage((prev) => (prev > 0 ? prev - 1 : 0));
-    setCompleted(false);
-  };
-
-  const handleResetStage = () => {
-    loadStage(stage);
-    const resetSound = new Audio("/sounds/reset.mp3");
-    resetSound.play();
-  };
-
-  // 🔹 حساب التقدم بالنسبة المئوية
-  const progressPercent = Math.min((stage / totalStages) * 100, 100);
+  // 🟡 التقدم بالنسبة المئوية
+  const progress = Math.min((level / totalLevels) * 100, 100);
 
   return (
-    <div className="p-4 text-center">
-      <h2 className="text-xl font-bold mb-4">🅰️ لعبة الحروف</h2>
+    <div className="p-6 text-center">
+      {showConfetti && <Confetti />}
 
-      {/* المرحلة الحالية */}
-      {!completed ? (
-        <div className="mb-4">
-          <span className="px-4 py-2 bg-yellow-300 rounded-full text-lg font-semibold shadow animate-pulse">
-            📖 المرحلة: {stage + 1} / {totalStages}
-          </span>
-        </div>
-      ) : (
-        <div className="mb-6 text-2xl font-bold text-green-600 animate-bounce">
-          🎉 أحسنت! أنهيت كل المراحل!
-        </div>
-      )}
+      <h1 className="text-2xl font-bold mb-4">🎯 لعبة كوكو وأصدقاء الحروف</h1>
 
-      {/* شريط التقدم */}
-      <div className="w-full max-w-lg mx-auto bg-gray-200 rounded-full h-4 mb-6 overflow-hidden">
+      {/* ✅ شريط التقدم */}
+      <div className="w-full bg-gray-200 rounded-full h-6 mb-6 shadow-inner">
         <div
-          className="bg-green-500 h-4 transition-all duration-500"
-          style={{ width: `${progressPercent}%` }}
+          className="bg-green-500 h-6 rounded-full transition-all duration-500 ease-in-out"
+          style={{ width: `${progress}%` }}
         ></div>
       </div>
 
-      {/* منطقة الحروف */}
-      {!completed && (
-        <>
-          <div
-            id="gameBoard"
-            className="board grid grid-cols-5 gap-2 mb-6 justify-center"
-          ></div>
-
-          {/* منطقة العناصر القابلة للسحب */}
-          <div
-            id="draggables"
-            className="draggables flex flex-wrap gap-3 justify-center mb-6"
-          ></div>
-        </>
-      )}
-
-      {/* أزرار التحكم */}
-      <div className="flex justify-center gap-4 flex-wrap">
-        {stage > 0 && !completed && (
+      {/* 🟠 محتوى المرحلة */}
+      {!completed ? (
+        <div>
+          <p className="text-lg mb-4">📚 المرحلة {level} من {totalLevels}</p>
           <button
-            onClick={handlePreviousStage}
-            className="px-6 py-2 bg-blue-500 text-white rounded-lg shadow hover:bg-blue-600 transition"
+            onClick={() => setLevel(level + 1)}
+            className="px-6 py-3 bg-blue-500 text-white rounded-lg shadow hover:bg-blue-600 transition"
           >
-            ⏮️ Previous Stage
+            ✅ إكمال المرحلة
           </button>
-        )}
-        {!completed && (
-          <>
-            <button
-              onClick={handleResetStage}
-              className="px-6 py-2 bg-yellow-500 text-white rounded-lg shadow hover:bg-yellow-600 transition"
-            >
-              🔄 Reset Stage
-            </button>
-            <button
-              onClick={handleNextStage}
-              className="px-6 py-2 bg-green-500 text-white rounded-lg shadow hover:bg-green-600 transition"
-            >
-              ⏭️ Next Stage
-            </button>
-          </>
-        )}
-      </div>
+        </div>
+      ) : (
+        <div className="mt-6">
+          <h2 className="text-xl font-bold text-green-600 mb-4">
+            🎉 أحسنت! لقد أنجزت كل المراحل!
+          </h2>
+
+          {/* 🏅 زر طباعة الشهادة */}
+          <button
+            onClick={() => {
+              const name = prompt("✍️ اكتب اسمك ليظهر في الشهادة:");
+              if (name) {
+                const printWindow = window.open("", "_blank");
+                printWindow.document.write(`
+                  <html>
+                    <head>
+                      <title>شهادة إنجاز</title>
+                      <style>
+                        body { text-align: center; font-family: 'Amiri', serif; padding: 50px; }
+                        .certificate {
+                          border: 10px solid gold;
+                          padding: 40px;
+                          border-radius: 20px;
+                          background: #fff8e1;
+                          box-shadow: 0 0 20px rgba(0,0,0,0.2);
+                        }
+                        h1 { font-size: 36px; color: #4a148c; }
+                        h2 { font-size: 28px; margin: 20px 0; color: #2e7d32; }
+                        p { font-size: 20px; }
+                      </style>
+                    </head>
+                    <body>
+                      <div class="certificate">
+                        <h1>🏅 شهادة إنجاز</h1>
+                        <h2>تهانينا ${name}!</h2>
+                        <p>لقد أكملت لعبة <b>كوكو وأصدقاء الحروف</b> بنجاح 🎉</p>
+                        <p>تاريخ الإنجاز: ${new Date().toLocaleDateString("ar-EG")}</p>
+                      </div>
+                      <script>window.print();</script>
+                    </body>
+                  </html>
+                `);
+                printWindow.document.close();
+              }
+            }}
+            className="px-6 py-3 bg-purple-500 text-white rounded-lg shadow hover:bg-purple-600 transition animate-bounce"
+          >
+            🏅 طباعة الشهادة
+          </button>
+        </div>
+      )}
     </div>
   );
-}
+};
+
+export default LetterSortingGame;
