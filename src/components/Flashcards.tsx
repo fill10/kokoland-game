@@ -1,110 +1,72 @@
-import React, { useState, useEffect } from "react";
-import Confetti from "react-confetti";
+import { useState } from "react";
 
-const LetterSortingGame = () => {
-  const totalLevels = 5; // ✅ غيّر العدد حسب عدد المراحل الفعلي
-  const [level, setLevel] = useState(1);
-  const [completed, setCompleted] = useState(false);
-  const [showConfetti, setShowConfetti] = useState(false);
+const flashcards = [
+  {
+    letter: "أ",
+    word: "أسد",
+    image: "/assets/images/lion.png",
+    sound: "/sounds/alif.mp3",
+    video: "https://youtube.com/shorts/XXXX" // ضع رابط فيديو حرف أ
+  },
+  {
+    letter: "ب",
+    word: "بطة",
+    image: "/assets/images/duck.png",
+    sound: "/sounds/baa.mp3",
+    video: "https://youtube.com/shorts/YYYY"
+  }
+  // 🔔 أضف بقية الحروف هنا
+];
 
-  // 🎵 صوت التهنئة
-  const playSuccessSound = () => {
-    const audio = new Audio("/assets/success.mp3"); // ضع ملف الصوت داخل مجلد assets
-    audio.play();
-  };
-
-  // 🟢 استدعاء عند إكمال كل المستويات
-  useEffect(() => {
-    if (level > totalLevels) {
-      setCompleted(true);
-      setShowConfetti(true);
-      playSuccessSound();
-
-      // confetti يختفي بعد 6 ثوانٍ
-      setTimeout(() => setShowConfetti(false), 6000);
-    }
-  }, [level]);
-
-  // 🟡 التقدم بالنسبة المئوية
-  const progress = Math.min((level / totalLevels) * 100, 100);
+export default function Flashcards() {
+  const [index, setIndex] = useState(0);
+  const card = flashcards[index];
 
   return (
     <div className="p-6 text-center">
-      {showConfetti && <Confetti />}
+      <h2 className="text-xl font-bold mb-4">🎴 البطاقات التعليمية</h2>
 
-      <h1 className="text-2xl font-bold mb-4">🎯 لعبة كوكو وأصدقاء الحروف</h1>
-
-      {/* ✅ شريط التقدم */}
-      <div className="w-full bg-gray-200 rounded-full h-6 mb-6 shadow-inner">
-        <div
-          className="bg-green-500 h-6 rounded-full transition-all duration-500 ease-in-out"
-          style={{ width: `${progress}%` }}
-        ></div>
+      {/* بطاقة */}
+      <div className="w-64 h-80 bg-white rounded-2xl shadow-lg flex flex-col items-center justify-center mx-auto mb-6 p-4">
+        <div className="text-6xl font-bold mb-4">{card.letter}</div>
+        <img src={card.image} alt={card.word} className="w-24 h-24 mb-4" />
+        <div className="text-lg">{card.word}</div>
       </div>
 
-      {/* 🟠 محتوى المرحلة */}
-      {!completed ? (
-        <div>
-          <p className="text-lg mb-4">📚 المرحلة {level} من {totalLevels}</p>
-          <button
-            onClick={() => setLevel(level + 1)}
-            className="px-6 py-3 bg-blue-500 text-white rounded-lg shadow hover:bg-blue-600 transition"
-          >
-            ✅ إكمال المرحلة
-          </button>
-        </div>
-      ) : (
-        <div className="mt-6">
-          <h2 className="text-xl font-bold text-green-600 mb-4">
-            🎉 أحسنت! لقد أنجزت كل المراحل!
-          </h2>
+      {/* أزرار التحكم */}
+      <div className="flex gap-4 justify-center">
+        <button
+          onClick={() => new Audio(card.sound).play()}
+          className="px-4 py-2 bg-blue-500 text-white rounded-lg"
+        >
+          🔊 استمع
+        </button>
+        <a
+          href={card.video}
+          target="_blank"
+          className="px-4 py-2 bg-red-500 text-white rounded-lg"
+        >
+          🎥 شاهد الفيديو
+        </a>
+      </div>
 
-          {/* 🏅 زر طباعة الشهادة */}
-          <button
-            onClick={() => {
-              const name = prompt("✍️ اكتب اسمك ليظهر في الشهادة:");
-              if (name) {
-                const printWindow = window.open("", "_blank");
-                printWindow.document.write(`
-                  <html>
-                    <head>
-                      <title>شهادة إنجاز</title>
-                      <style>
-                        body { text-align: center; font-family: 'Amiri', serif; padding: 50px; }
-                        .certificate {
-                          border: 10px solid gold;
-                          padding: 40px;
-                          border-radius: 20px;
-                          background: #fff8e1;
-                          box-shadow: 0 0 20px rgba(0,0,0,0.2);
-                        }
-                        h1 { font-size: 36px; color: #4a148c; }
-                        h2 { font-size: 28px; margin: 20px 0; color: #2e7d32; }
-                        p { font-size: 20px; }
-                      </style>
-                    </head>
-                    <body>
-                      <div class="certificate">
-                        <h1>🏅 شهادة إنجاز</h1>
-                        <h2>تهانينا ${name}!</h2>
-                        <p>لقد أكملت لعبة <b>كوكو وأصدقاء الحروف</b> بنجاح 🎉</p>
-                        <p>تاريخ الإنجاز: ${new Date().toLocaleDateString("ar-EG")}</p>
-                      </div>
-                      <script>window.print();</script>
-                    </body>
-                  </html>
-                `);
-                printWindow.document.close();
-              }
-            }}
-            className="px-6 py-3 bg-purple-500 text-white rounded-lg shadow hover:bg-purple-600 transition animate-bounce"
-          >
-            🏅 طباعة الشهادة
-          </button>
-        </div>
-      )}
+      {/* تنقل بين البطاقات */}
+      <div className="flex gap-4 justify-center mt-6">
+        <button
+          disabled={index === 0}
+          onClick={() => setIndex(index - 1)}
+          className="px-4 py-2 bg-gray-400 text-white rounded-lg disabled:opacity-50"
+        >
+          ⏮️ السابق
+        </button>
+        <button
+          disabled={index === flashcards.length - 1}
+          onClick={() => setIndex(index + 1)}
+          className="px-4 py-2 bg-green-500 text-white rounded-lg disabled:opacity-50"
+        >
+          ⏭️ التالي
+        </button>
+      </div>
     </div>
   );
-};
-
-export default LetterSortingGame;
+}
