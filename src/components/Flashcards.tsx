@@ -1,72 +1,55 @@
-import { useState } from "react";
+// src/components/Flashcards.tsx
+import React, { useState } from "react";
 
-const flashcards = [
-  {
-    letter: "أ",
-    word: "أسد",
-    image: "/assets/images/lion.png",
-    sound: "/sounds/alif.mp3",
-    video: "https://youtube.com/shorts/XXXX" // ضع رابط فيديو حرف أ
-  },
-  {
-    letter: "ب",
-    word: "بطة",
-    image: "/assets/images/duck.png",
-    sound: "/sounds/baa.mp3",
-    video: "https://youtube.com/shorts/YYYY"
-  }
-  // 🔔 أضف بقية الحروف هنا
-];
+const Flashcards = () => {
+  // مثال مبدئي: بطاقة واحدة فقط
+  const [flipped, setFlipped] = useState(false);
 
-export default function Flashcards() {
+  const cards = [
+    { front: "أ", back: "🍎 تفاحة" },
+    { front: "ب", back: "🐪 بعير" },
+    { front: "ت", back: "🐊 تمساح" },
+  ];
+
   const [index, setIndex] = useState(0);
-  const card = flashcards[index];
 
   return (
-    <div className="p-6 text-center">
-      <h2 className="text-xl font-bold mb-4">🎴 البطاقات التعليمية</h2>
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-yellow-100 to-pink-100 p-6">
+      <h1 className="text-2xl font-bold mb-6">🎴 البطاقات التعليمية</h1>
 
-      {/* بطاقة */}
-      <div className="w-64 h-80 bg-white rounded-2xl shadow-lg flex flex-col items-center justify-center mx-auto mb-6 p-4">
-        <div className="text-6xl font-bold mb-4">{card.letter}</div>
-        <img src={card.image} alt={card.word} className="w-24 h-24 mb-4" />
-        <div className="text-lg">{card.word}</div>
+      {/* البطاقة */}
+      <div
+        className={`w-64 h-40 flex items-center justify-center text-4xl font-bold rounded-xl shadow-lg cursor-pointer bg-white transition-transform duration-500 ${
+          flipped ? "rotate-y-180" : ""
+        }`}
+        onClick={() => setFlipped(!flipped)}
+      >
+        {!flipped ? cards[index].front : cards[index].back}
       </div>
 
       {/* أزرار التحكم */}
-      <div className="flex gap-4 justify-center">
+      <div className="flex gap-4 mt-6">
         <button
-          onClick={() => new Audio(card.sound).play()}
-          className="px-4 py-2 bg-blue-500 text-white rounded-lg"
+          className="px-4 py-2 bg-blue-500 text-white rounded-lg shadow hover:bg-blue-600"
+          onClick={() => {
+            setIndex((index - 1 + cards.length) % cards.length);
+            setFlipped(false);
+          }}
         >
-          🔊 استمع
-        </button>
-        <a
-          href={card.video}
-          target="_blank"
-          className="px-4 py-2 bg-red-500 text-white rounded-lg"
-        >
-          🎥 شاهد الفيديو
-        </a>
-      </div>
-
-      {/* تنقل بين البطاقات */}
-      <div className="flex gap-4 justify-center mt-6">
-        <button
-          disabled={index === 0}
-          onClick={() => setIndex(index - 1)}
-          className="px-4 py-2 bg-gray-400 text-white rounded-lg disabled:opacity-50"
-        >
-          ⏮️ السابق
+          ⬅️ السابق
         </button>
         <button
-          disabled={index === flashcards.length - 1}
-          onClick={() => setIndex(index + 1)}
-          className="px-4 py-2 bg-green-500 text-white rounded-lg disabled:opacity-50"
+          className="px-4 py-2 bg-green-500 text-white rounded-lg shadow hover:bg-green-600"
+          onClick={() => {
+            setIndex((index + 1) % cards.length);
+            setFlipped(false);
+          }}
         >
-          ⏭️ التالي
+          التالي ➡️
         </button>
       </div>
     </div>
   );
-}
+};
+
+export default Flashcards;
