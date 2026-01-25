@@ -1,114 +1,68 @@
-/* ====== Global ====== */
 body {
-  margin: 0;
-  padding: 0;
-  font-family: "Cairo", "Amiri", sans-serif;
-  background-color: #f9f9f9;
-  color: #333;
-  direction: rtl;
+  font-family: "Tahoma", sans-serif;
+  background: linear-gradient(to bottom, #dff6ff, #ffffff);
   text-align: center;
-}
-
-.container {
-  max-width: 1200px;
-  margin: auto;
   padding: 20px;
+  margin: 0;
 }
 
-/* ====== Language toggle ====== */
-.lang-toggle {
-  position: fixed;
-  top: 20px;
-  left: 20px;
-  background: #ffd23f;
-  border: none;
-  padding: 12px 20px;
-  font-size: 18px;
-  font-weight: bold;
-  border-radius: 12px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  z-index: 1000;
-}
-.lang-toggle:hover {
-  background: #ffb703;
-  transform: scale(1.05);
+.title {
+  font-size: 2.2rem;
+  margin-bottom: 25px;
+  color: #444;
 }
 
-/* ====== Drop Zones ====== */
-.drop-zones {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-  gap: 20px;
-  margin: 30px auto;
-  justify-items: center;
-}
-
-.drop-zone {
-  width: 140px;
-  height: 140px;
-  background-color: #fff;
-  border: 3px dashed #ccc;
-  border-radius: 20px;
+.game-container {
   display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 50px;
-  font-weight: bold;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-.drop-zone:hover {
-  border-color: #0077b6;
-  background-color: #f0f8ff;
-  transform: scale(1.05);
-}
-
-/* ====== Draggables ====== */
-.draggable-items {
-  display: flex;
+  justify-content: space-around;
+  align-items: flex-start;
+  gap: 40px;
   flex-wrap: wrap;
-  gap: 20px;
-  justify-content: center;
-  margin-top: 40px;
 }
 
-.draggable {
-  width: 120px;
-  height: 120px;
-  cursor: grab;
-  border-radius: 16px;
-  background: #ffffff;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-  transition: transform 0.2s ease;
+.letters, .dropzones {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 15px;
 }
-.draggable:hover {
+
+.letter {
+  width: 90px;
+  height: 90px;
+  cursor: grab;
+  border-radius: 20px;
+  transition: transform 0.2s;
+}
+.letter:active {
   transform: scale(1.1);
 }
 
-/* ====== Success msg ====== */
-.success-message {
-  font-size: 22px;
-  font-weight: bold;
-  color: #2a9d8f;
-  margin-top: 20px;
-  animation: pop 0.6s ease;
-}
-@keyframes pop {
-  0% { transform: scale(0.8); opacity: 0; }
-  100% { transform: scale(1); opacity: 1; }
+.dropzone {
+  width: 100px;
+  height: 100px;
+  border-radius: 20px;
+  background: #f9f9f9;
+  border: 3px solid #ddd;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
 }
 
-/* ====== Responsive ====== */
-@media (max-width: 768px) {
-  .drop-zone {
-    width: 100px;
-    height: 100px;
-    font-size: 40px;
-  }
-  .draggable {
-    width: 100px;
-    height: 100px;
-  }
+.dropzone.over {
+  border-color: #4caf50;
+  background: #eaffea;
+  transform: scale(1.05);
+}
+
+#congrats {
+  margin-top: 20px;
+  font-size: 1.5rem;
+  color: #2e7d32;
+  display: none;
+}
+#congrats.show {
+  display: block;
 }
