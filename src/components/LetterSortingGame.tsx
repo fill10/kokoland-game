@@ -4,9 +4,8 @@ import Confetti from "react-confetti";
 
 import { letters } from "../assets/letters";
 import { playLetterSound } from "../assets/letterSounds";
-import successSound from "/public/sounds/success.mp3";
-import errorSound from "/public/sounds/error.mp3";
-
+const successSound = "/sounds/success.mp3";
+const errorSound = "/sounds/error.mp3";
 const totalLevels = letters.length;
 
 export default function LetterSortingGame() {
