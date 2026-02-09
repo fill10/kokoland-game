@@ -1,121 +1,138 @@
-// change test
 import React, { useState, useEffect } from "react";
 import Confetti from "react-confetti";
 
+// استيراد البيانات
 import { letters } from "../assets/letters";
-import { playLetterSound } from "../assets/letterSounds";
+// تأكدي أن هذا الملف موجود، وإذا لم يكن موجوداً احذفي السطر التالي
+import { playLetterSound } from "../assets/letterSounds"; 
+
+// تعريف مسارات الأصوات من المجلد العام مباشرة
 const successSound = "/sounds/success.mp3";
 const errorSound = "/sounds/error.mp3";
-const totalLevels = letters.length;
 
 export default function LetterSortingGame() {
-  const [level, setLevel] = useState(0);
-  const [target, setTarget] = useState(letters[0]);
-  const [completed, setCompleted] = useState(false);
+  const [currentIndex, setCurrentIndex] = useState(0); // الحرف الحالي
+  const [options, setOptions] = useState<any[]>([]); // الخيارات الثلاثة
+  const [isCompleted, setIsCompleted] = useState(false); // هل انتهت اللعبة؟
   const [showConfetti, setShowConfetti] = useState(false);
+  const [shake, setShake] = useState<number | null>(null); // لعمل اهتزاز عند الخطأ
 
+  const currentLetter = letters[currentIndex];
+
+  // دالة تشغيل الأصوات
+  const playAudio = (path: string) => {
+    const audio = new Audio(path);
+    audio.play().catch((e) => console.log("Audio error:", e));
+  };
+
+  // دالة لخلط الخيارات (تجهيز السؤال)
   useEffect(() => {
-    setTarget(letters[level]);
-  }, [level]);
+    if (!currentLetter) return;
 
-  const playSuccess = () => new Audio(successSound).play();
-  const playError = () => new Audio(errorSound).play();
+    // 1. نأخذ الحرف الصحيح
+    let choices = [currentLetter];
 
-  function handleChoice(letter: any) {
-    if (letter.id === target.id) {
-      playLetterSound(letter.id);
-      playSuccess();
+    // 2. نختار حرفين عشوائيين مختلفين عن الحرف الصحيح
+    while (choices.length < 3) {
+      const random = letters[Math.floor(Math.random() * letters.length)];
+      if (!choices.find((c) => c.id === random.id)) {
+        choices.push(random);
+      }
+    }
 
-      if (level + 1 === totalLevels) {
-        setCompleted(true);
+    // 3. نخلط أماكنهم عشوائياً
+    choices = choices.sort(() => Math.random() - 0.5);
+    setOptions(choices);
+
+    // تشغيل صوت الحرف عند بداية السؤال (اختياري)
+    // playLetterSound(currentLetter.id); 
+
+  }, [currentIndex]);
+
+  // دالة عند الضغط على خيار
+  const handleOptionClick = (selectedLetter: any) => {
+    if (selectedLetter.id === currentLetter.id) {
+      // ✅ إجابة صحيحة
+      playAudio(successSound);
+      playLetterSound(selectedLetter.id); // نطق اسم الحرف
+
+      if (currentIndex + 1 === letters.length) {
+        // انتهت اللعبة
+        setIsCompleted(true);
         setShowConfetti(true);
-        setTimeout(() => setShowConfetti(false), 6000);
       } else {
-        setLevel(level + 1);
+        // الانتقال للحرف التالي بعد ثانية قصيرة
+        setTimeout(() => {
+          setCurrentIndex(currentIndex + 1);
+        }, 1000);
       }
     } else {
-      playError();
+      // ❌ إجابة خاطئة
+      playAudio(errorSound);
+      setShake(selectedLetter.id); // تفعيل الاهتزاز
+      setTimeout(() => setShake(null), 500); // إيقاف الاهتزاز
     }
+  };
+
+  // واجهة "النهاية" (الشهادة)
+  if (isCompleted) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[50vh] p-4 text-center">
+        <Confetti />
+        <h1 className="text-4xl font-bold text-green-600 mb-4 animate-bounce">
+          🎉 أحسنت يا بطل! 🎉
+        </h1>
+        <p className="text-xl mb-6">لقد تعلمت جميع الحروف بنجاح!</p>
+        <button
+          onClick={() => window.location.reload()}
+          className="bg-blue-500 text-white px-8 py-3 rounded-full text-xl shadow-lg hover:bg-blue-600 transition"
+        >
+          🔄 العب مرة أخرى
+        </button>
+      </div>
+    );
   }
 
-  const progress = Math.round(((level + 1) / totalLevels) * 100);
-
+  // واجهة "اللعب"
   return (
-    <div className="p-6 text-center">
-      {showConfetti && <Confetti />}
-
-      <h1 className="text-2xl font-bold mb-4">
-        🧩 اختر الحرف الصحيح
-      </h1>
-
-      {/* Progress */}
-      <div className="w-full bg-gray-200 rounded-full h-6 mb-4">
+    <div className="max-w-2xl mx-auto p-4 text-center">
+      {/* شريط التقدم */}
+      <div className="w-full bg-gray-200 rounded-full h-4 mb-6">
         <div
-          className="bg-green-500 h-6 rounded-full transition-all"
-          style={{ width: `${progress}%` }}
-        />
+          className="bg-green-500 h-4 rounded-full transition-all duration-500"
+          style={{ width: `${((currentIndex) / letters.length) * 100}%` }}
+        ></div>
       </div>
 
-      {!completed ? (
-        <>
-          {/* Target */}
-          <div className="mb-6">
-            <img
-              src={target.image}
-              alt={target.name}
-              className="w-32 h-32 mx-auto"
-            />
-            <p className="mt-2 text-xl font-bold">
-              أين حرف {target.name}؟
-            </p>
-          </div>
+      <h2 className="text-3xl font-bold mb-8 text-gray-800">
+        أين حرف <span className="text-blue-600">({currentLetter.name})</span> ؟
+      </h2>
 
-          {/* Grid */}
-          <div className="grid grid-cols-4 gap-4 max-w-md mx-auto">
-            {letters.map((letter) => (
-              <button
-                key={letter.id}
-                onClick={() => handleChoice(letter)}
-                className="bg-white rounded-xl shadow hover:scale-105 transition p-2"
-              >
-                <img
-                  src={letter.image}
-                  alt={letter.name}
-                  className="w-16 h-16 mx-auto"
-                />
-              </button>
-            ))}
-          </div>
-        </>
-      ) : (
-        <div className="mt-6">
-          <h2 className="text-2xl font-bold text-green-600 mb-4">
-            🎉 أكملت جميع الحروف!
-          </h2>
-
+      {/* شبكة الخيارات */}
+      <div className="grid grid-cols-3 gap-6">
+        {options.map((option) => (
           <button
-            onClick={() => {
-              const name = prompt("✍️ اكتب اسم الطفل:");
-              if (!name) return;
-
-              const w = window.open("", "_blank");
-              w!.document.write(`
-                <h1 style="text-align:center">🏅 شهادة إنجاز</h1>
-                <h2 style="text-align:center">${name}</h2>
-                <p style="text-align:center">
-                أكمل لعبة كوكو وأصدقاء الحروف بنجاح
-                </p>
-                <script>window.print()</script>
-              `);
-              w!.document.close();
-            }}
-            className="px-6 py-3 bg-purple-500 text-white rounded-lg animate-bounce"
+            key={option.id}
+            onClick={() => handleOptionClick(option)}
+            className={`
+              relative p-4 bg-white rounded-2xl shadow-xl border-4 border-transparent
+              hover:scale-105 transition-transform duration-200
+              ${shake === option.id ? "animate-shake border-red-400" : ""}
+            `}
           >
-            🖨️ طباعة الشهادة
+            <img
+              src={option.image}
+              alt={option.name}
+              className="w-full h-32 object-contain mx-auto"
+            />
           </button>
-        </div>
-      )}
+        ))}
+      </div>
+
+      {/* تعليمات مساعدة */}
+      <p className="mt-8 text-gray-500 text-sm">
+        اضغط على الصورة التي تطابق الحرف المطلوب
+      </p>
     </div>
   );
 }
-س
